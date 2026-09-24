@@ -1,0 +1,488 @@
+AUTOMATED YOUTUBE -> SHORTS PIPELINE
+
+Goal
+
+Build a laptop-based tool that takes a YouTube video URL, downloads it,
+finds the best moments, turns them into vertical Shorts with captions,
+generates metadata, and lets the user approve/publish them to YouTube.
+
+Design principle
+
+The project must be usable in small sessions. Every milestone should
+leave a working artifact. If work stops for a day/week, the STATUS.md
+file should say exactly where to resume.
+
+Target workflow
+
+1.  Paste YouTube URL.
+2.  Download video + audio.
+3.  Extract/transcribe speech.
+4.  Detect interesting moments.
+5.  Create several clips.
+6.  Convert clips to 9:16.
+7.  Track/reframe the speaker when practical.
+8.  Add animated captions.
+9.  Generate title/description/hashtags.
+10. Preview clips.
+11. User approves selected clips.
+12. Upload approved clips to YouTube Shorts.
+13. Save upload history so clips are not accidentally duplicated.
+
+Recommended stack
+
+-   Python 3
+-   FFmpeg
+-   yt-dlp
+-   Whisper or faster-whisper for transcription
+-   Python libraries for video/audio processing
+-   An LLM for clip selection and metadata (start with a free/local
+    option where practical)
+-   YouTube Data API for uploading
+-   JSON files initially for configuration/history; database later if
+    needed
+-   Git for backups/versioning
+
+Important constraint
+
+Do NOT try to build everything at once. Build the pipeline in layers and
+test each layer independently.
+
+PROJECT STRUCTURE
+
+youtube-shorts-bot/ | +– app/ | +– main.py | +– downloader.py | +–
+transcriber.py | +– clip_finder.py | +– clipper.py | +– captions.py | +–
+metadata.py | +– youtube_uploader.py | +– config.py | +– utils.py | +–
+input/ +– work/ +– output/ +– credentials/ +– logs/ | +– config.json +–
+requirements.txt +– README.md +– STATUS.md +– .gitignore
+
+MILESTONE 0 - SAFETY / LEGAL / CHANNEL RULES
+
+Before automation is used on real content: - Only download/use videos
+you have permission to use or that are otherwise legally usable. - Do
+not build the system around bypassing DRM or access controls. - Respect
+YouTube’s terms and API limits. - Avoid spammy mass-upload behavior. -
+Keep the approval step until the system is reliable.
+
+DONE WHEN: - We understand the source-content rules. - The system
+defaults to manual approval before publishing.
+
+MILESTONE 1 - MACHINE SETUP
+
+Install: - Python - FFmpeg - Git - VS Code (optional but recommended)
+
+Verify from terminal: - python –version - ffmpeg -version - git –version
+
+Create project folder and virtual environment.
+
+Create: requirements.txt config.json STATUS.md
+
+DONE WHEN: - Python runs. - FFmpeg runs. - Project opens correctly. -
+Virtual environment activates.
+
+MILESTONE 2 - YOUTUBE DOWNLOAD
+
+Goal: Given a YouTube URL, download a local video file.
+
+Build: app/downloader.py
+
+Input: URL
+
+Output: work//source.mp4
+
+Store basic metadata: - video ID - title - channel - duration - source
+URL
+
+Test cases: - short video - long video - video with normal audio
+
+DONE WHEN: Running the downloader with a URL creates a playable local
+MP4.
+
+MILESTONE 3 - AUDIO EXTRACTION
+
+Goal: Extract clean audio for transcription.
+
+Use FFmpeg.
+
+Input: source.mp4
+
+Output: work//audio.wav
+
+Recommended transcription-friendly format: - mono - reasonable sample
+rate - WAV
+
+DONE WHEN: The extracted audio can be played and is accepted by the
+transcription system.
+
+MILESTONE 4 - TRANSCRIPTION
+
+Goal: Create a timestamped transcript.
+
+Use Whisper/faster-whisper.
+
+Output example: work//transcript.json
+
+Each segment should contain: - start - end - text
+
+Example: [ { “start”: 12.4, “end”: 18.9, “text”: “…” }]
+
+Also create: transcript.txt
+
+DONE WHEN: A video produces a timestamped transcript.
+
+MILESTONE 5 - FIND GOOD CLIPS
+
+Goal: Automatically identify interesting sections.
+
+First version should NOT depend on complicated AI.
+
+Use simple rules: - clip duration target: roughly 20-60 seconds - avoid
+incomplete sentences - prefer segments with a clear beginning/end -
+avoid long silent sections - avoid excessive overlap between clips
+
+Then add AI scoring.
+
+AI should receive transcript segments and return candidates such as:
+
+{ “start”: 125.2, “end”: 164.8, “score”: 9, “reason”: “Strong hook and
+complete story”, “hook”: “…” }
+
+Potential scoring criteria: - strong opening/hook - useful information -
+surprising statement - emotional moment - story completion -
+self-contained context - low ambiguity - good ending
+
+DONE WHEN: The program can select 3-10 candidate clips from a longer
+video.
+
+MILESTONE 6 - AUTOMATIC VIDEO CUTTING
+
+Goal: Turn candidate timestamps into separate videos.
+
+For each candidate: output//clip_01_raw.mp4 output//clip_02_raw.mp4 …
+
+Keep: - original audio - correct start/end timestamps - reasonable
+quality
+
+DONE WHEN: Candidate clips play correctly and start/end naturally.
+
+MILESTONE 7 - VERTICAL SHORTS FORMAT
+
+Goal: Convert horizontal video to 9:16.
+
+Target: 1080x1920 when hardware allows.
+
+Possible layouts: A. Center crop B. Speaker tracking C. Main video +
+blurred background D. Two-person/screen-aware layout later
+
+Start with the simplest reliable crop.
+
+If faces are detectable, later improve framing with face tracking.
+
+DONE WHEN: A source clip becomes a proper vertical video suitable for
+Shorts.
+
+MILESTONE 8 - CAPTIONS
+
+Goal: Generate readable burned-in captions.
+
+Use transcript timestamps.
+
+Caption requirements: - large enough for phones - high contrast -
+positioned away from important UI areas - short phrases rather than
+giant paragraphs - synchronized with speech
+
+Version 1: Simple static captions.
+
+Version 2: Word-by-word / animated captions.
+
+Version 3: Automatic emphasis of important words.
+
+DONE WHEN: A generated Short contains synchronized readable captions.
+
+MILESTONE 9 - QUALITY CONTROL
+
+Before publishing, automatically check: - duration is appropriate -
+resolution is correct - file exists - audio exists - captions exist if
+enabled - no obvious empty/silent beginning - no duplicate clip - output
+file is playable
+
+Create: logs/.log
+
+Also create a simple report: output//report.json
+
+DONE WHEN: Bad files are rejected before upload.
+
+MILESTONE 10 - METADATA GENERATION
+
+For every Short generate: - title - description - hashtags - optional
+source attribution text
+
+Example internal structure:
+
+{ “title”: “…”, “description”: “…”, “hashtags”: [“#shorts”, “…”] }
+
+The title should: - be short - create curiosity without lying - reflect
+the actual clip - avoid spam
+
+DONE WHEN: Every approved clip has metadata ready for upload.
+
+MILESTONE 11 - LOCAL REVIEW UI
+
+Build a simple interface.
+
+First version can be a terminal menu:
+
+1.  Process URL
+2.  View generated clips
+3.  Approve clip
+4.  Reject clip
+5.  Upload approved clips
+6.  View history
+
+Better version later: Small local web interface running on localhost.
+
+Show: - video preview - title - description - clip score -
+approve/reject button
+
+DONE WHEN: You can review generated Shorts without manually digging
+through folders.
+
+MILESTONE 12 - YOUTUBE API UPLOAD
+
+Goal: Upload approved videos automatically.
+
+Set up a Google Cloud project and YouTube Data API credentials.
+
+Important: - Keep client secrets out of Git. - Put credentials in
+credentials/. - Add credentials/ to .gitignore. - Use OAuth rather than
+storing a channel password.
+
+Upload fields: - video file - title - description - tags - privacy
+status - category - optional scheduled publish time
+
+Recommended first mode: PRIVATE or UNLISTED.
+
+Only switch to PUBLIC after testing.
+
+DONE WHEN: One approved Short can be uploaded successfully through the
+API.
+
+MILESTONE 13 - APPROVAL-FIRST AUTOMATION
+
+Target workflow:
+
+python main.py “YOUTUBE_URL”
+
+Then:
+
+[1] Downloading… [2] Transcribing… [3] Finding clips… [4] Rendering… [5]
+Generating captions… [6] Generating metadata…
+
+READY: clip_01.mp4 clip_02.mp4 clip_03.mp4
+
+Approve: [1] clip_01 [2] clip_02 [3] clip_03
+
+Then: Upload approved clips? Y/N
+
+DONE WHEN: The complete pipeline works from one command.
+
+MILESTONE 14 - BATCH MODE
+
+Allow multiple URLs:
+
+python main.py urls.txt
+
+urls.txt: one YouTube URL per line.
+
+The program processes each source and keeps separate folders.
+
+DONE WHEN: Several videos can be queued without manually restarting the
+program.
+
+MILESTONE 15 - SCHEDULING
+
+Add: - upload schedule - maximum Shorts/day - preferred publishing
+times - queue management
+
+Example: MAX_UPLOADS_PER_DAY = 3
+
+Do not enable unrestricted automatic publishing initially.
+
+DONE WHEN: Approved clips can be scheduled safely.
+
+MILESTONE 16 - DUPLICATE PROTECTION
+
+Track: - source video ID - source timestamp - generated clip hash -
+upload ID - upload date
+
+Before generating/uploading: Check whether the same source segment has
+already been processed.
+
+DONE WHEN: Running the same URL twice does not create accidental
+duplicate uploads.
+
+MILESTONE 17 - ERROR RECOVERY
+
+Handle: - internet failure - download failure - transcription failure -
+FFmpeg failure - API failure - expired OAuth token - insufficient disk
+space
+
+The program should save its state so a failed job can resume.
+
+DONE WHEN: A failure does not require restarting the entire pipeline.
+
+MILESTONE 18 - PERFORMANCE OPTIMIZATION
+
+Once everything works: - use faster-whisper - use GPU acceleration if
+available - cache transcripts - avoid re-rendering unchanged clips -
+process clips efficiently - clean temporary files automatically
+
+DONE WHEN: A normal source video can be processed in a reasonable amount
+of time on the available laptop.
+
+MILESTONE 19 - OPTIONAL AI IMPROVEMENTS
+
+Later improvements: - face detection/tracking - speaker detection -
+silence removal - automatic hook rewriting (carefully) - B-roll
+suggestions - automatic zooms - animated captions - profanity
+detection - duplicate-content detection - clip quality ranking -
+thumbnail generation - multiple editing styles - channel-specific style
+presets
+
+MILESTONE 20 - FULL AUTOMATION
+
+Final target:
+
+INPUT: YouTube URL
+
+AUTOMATIC: Download -> Transcribe -> Analyze -> Select clips -> Edit ->
+Caption -> Generate metadata -> Quality check -> Put in approval queue
+
+USER: Approve/reject
+
+AUTOMATIC: Upload -> Schedule -> Record upload ID -> Update history
+
+FINAL COMMAND EXAMPLE
+
+python main.py –url “https://www.youtube.com/watch?v=…”
+
+or eventually:
+
+python main.py
+
+and paste the URL when prompted.
+
+CONFIGURATION TO KEEP
+
+config.json should eventually contain things like:
+
+{ “clip”: { “min_seconds”: 20, “max_seconds”: 60, “number_to_generate”:
+5 }, “video”: { “width”: 1080, “height”: 1920 }, “captions”: {
+“enabled”: true, “animated”: false }, “youtube”: { “privacy”: “private”,
+“max_uploads_per_day”: 3 }, “approval_required”: true }
+
+DO NOT hard-code secrets into Python files.
+
+SESSION WORKFLOW
+
+Every time you return to the project:
+
+1.  Open STATUS.md.
+2.  Read “Current milestone”.
+3.  Read “Last completed test”.
+4.  Run the test listed there.
+5.  Continue with the next unchecked task.
+6.  Update STATUS.md before stopping.
+
+STATUS.md TEMPLATE
+
+PROJECT: Automated YouTube Shorts Pipeline
+
+CURRENT MILESTONE: 0
+
+LAST COMPLETED: Nothing yet.
+
+CURRENT TASK: Install Python, FFmpeg and Git.
+
+NEXT TASK: Create project folder and virtual environment.
+
+LAST SUCCESSFUL TEST: None.
+
+KNOWN PROBLEMS: None.
+
+FILES CREATED: None.
+
+NOTES: Keep approval required before publishing.
+
+TODAY’S SESSION
+
+At the end of every work session write:
+
+Date: Time spent: Milestone: What I completed: What works: What does not
+work: Exact next step: Errors: Files changed:
+
+This prevents the “I forgot where I was” problem.
+
+REALISTIC BUILD ORDER FOR SHORT SESSIONS
+
+SESSION 1 (~1 hour) - Install tools - Create project - Download first
+video - Make first raw clip
+
+SESSION 2 (~1 hour) - Audio extraction - Transcription - Timestamped
+transcript
+
+SESSION 3 (~1 hour) - Automatic clip selection - Generate several
+candidates
+
+SESSION 4 (~1 hour) - Vertical conversion - First captions
+
+SESSION 5 (~1 hour) - Improve captions/layout - Add metadata generation
+
+SESSION 6 (~1 hour) - Local approval system - Preview clips
+
+SESSION 7 (~1 hour) - YouTube API setup - Test private upload
+
+SESSION 8 (~1 hour) - End-to-end pipeline - Error handling - Save
+status/history
+
+After that: - improve quality - improve automation - add scheduling -
+add better AI selection
+
+MINIMUM VIABLE PRODUCT
+
+Do NOT get stuck trying to build the perfect system.
+
+The MVP is simply:
+
+YouTube URL -> download -> cut a clip -> convert to 9:16 -> captions ->
+save Short
+
+Then:
+
+Short -> approve -> upload to YouTube
+
+Everything else is an upgrade.
+
+FIRST THING TO DO
+
+When starting the project for the first time:
+
+1.  Check Windows version.
+2.  Check whether Python is installed.
+3.  Check whether FFmpeg is installed.
+4.  Check available disk space.
+5.  Create the project folder.
+6.  Create the virtual environment.
+7.  Install yt-dlp.
+8.  Download one test video.
+9.  STOP and verify it plays.
+
+Do not move to AI until the basic video pipeline works.
+
+END GOAL
+
+A simple personal Shorts factory that turns a long-form video into
+several reviewed, captioned, vertical Shorts and publishes approved ones
+to your YouTube channel with as little manual work as possible.
+
+The system should remain understandable and maintainable. Build the
+boring reliable parts first, then add AI and automation.

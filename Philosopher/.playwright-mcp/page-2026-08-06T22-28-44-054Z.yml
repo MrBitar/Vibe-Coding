@@ -1,0 +1,90 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - heading "Philosopher" [level=1] [ref=e4]
+    - paragraph [ref=e5]: Pick a philosophy. Chat with its most iconic thinker.
+  - generic [ref=e7]:
+    - button "Ancient Greek Philosophy Socrates The original method of questioning everything" [ref=e8] [cursor=pointer]:
+      - generic [ref=e9]: Ancient Greek Philosophy
+      - generic [ref=e10]: Socrates
+      - generic [ref=e11]: The original method of questioning everything
+    - button "Stoicism Marcus Aurelius Practical wisdom on hardship, emotion, and control" [ref=e12] [cursor=pointer]:
+      - generic [ref=e13]: Stoicism
+      - generic [ref=e14]: Marcus Aurelius
+      - generic [ref=e15]: Practical wisdom on hardship, emotion, and control
+    - button "Existentialism Jean-Paul Sartre Confronting a world without given meaning, and radical freedom" [ref=e16] [cursor=pointer]:
+      - generic [ref=e17]: Existentialism
+      - generic [ref=e18]: Jean-Paul Sartre
+      - generic [ref=e19]: Confronting a world without given meaning, and radical freedom
+    - button "Nihilism Friedrich Nietzsche Provocative, aphoristic confrontation with the death of old values" [ref=e20] [cursor=pointer]:
+      - generic [ref=e21]: Nihilism
+      - generic [ref=e22]: Friedrich Nietzsche
+      - generic [ref=e23]: Provocative, aphoristic confrontation with the death of old values
+    - button "Rationalism René Descartes Doubt everything, then rebuild knowledge on certain foundations" [ref=e24] [cursor=pointer]:
+      - generic [ref=e25]: Rationalism
+      - generic [ref=e26]: René Descartes
+      - generic [ref=e27]: Doubt everything, then rebuild knowledge on certain foundations
+    - button "Empiricism David Hume Knowledge built from experience, with a skeptical eye on causation" [ref=e28] [cursor=pointer]:
+      - generic [ref=e29]: Empiricism
+      - generic [ref=e30]: David Hume
+      - generic [ref=e31]: Knowledge built from experience, with a skeptical eye on causation
+    - button "Idealism Georg Wilhelm Friedrich Hegel Reality and history unfolding through dialectical development" [ref=e32] [cursor=pointer]:
+      - generic [ref=e33]: Idealism
+      - generic [ref=e34]: Georg Wilhelm Friedrich Hegel
+      - generic [ref=e35]: Reality and history unfolding through dialectical development
+    - button "Utilitarianism John Stuart Mill The greatest good for the greatest number" [ref=e36] [cursor=pointer]:
+      - generic [ref=e37]: Utilitarianism
+      - generic [ref=e38]: John Stuart Mill
+      - generic [ref=e39]: The greatest good for the greatest number
+    - button "Deontology / Ethics of Duty Immanuel Kant Morality as universal duty, not consequence" [ref=e40] [cursor=pointer]:
+      - generic [ref=e41]: Deontology / Ethics of Duty
+      - generic [ref=e42]: Immanuel Kant
+      - generic [ref=e43]: Morality as universal duty, not consequence
+    - button "Political Philosophy / Social Contract Thomas Hobbes Order, sovereignty, and escaping the state of nature" [ref=e44] [cursor=pointer]:
+      - generic [ref=e45]: Political Philosophy / Social Contract
+      - generic [ref=e46]: Thomas Hobbes
+      - generic [ref=e47]: Order, sovereignty, and escaping the state of nature
+    - button "Confucianism Confucius Virtue, ritual, and right relationships as the basis of a good life" [ref=e48] [cursor=pointer]:
+      - generic [ref=e49]: Confucianism
+      - generic [ref=e50]: Confucius
+      - generic [ref=e51]: Virtue, ritual, and right relationships as the basis of a good life
+    - button "Taoism Laozi The way of effortless harmony with the natural order" [ref=e52] [cursor=pointer]:
+      - generic [ref=e53]: Taoism
+      - generic [ref=e54]: Laozi
+      - generic [ref=e55]: The way of effortless harmony with the natural order
+    - button "Buddhism Siddhartha Gautama (the Buddha) The end of suffering through the Middle Way" [ref=e56] [cursor=pointer]:
+      - generic [ref=e57]: Buddhism
+      - generic [ref=e58]: Siddhartha Gautama (the Buddha)
+      - generic [ref=e59]: The end of suffering through the Middle Way
+    - button "Absurdism Albert Camus Facing a meaningless universe without despair" [ref=e60] [cursor=pointer]:
+      - generic [ref=e61]: Absurdism
+      - generic [ref=e62]: Albert Camus
+      - generic [ref=e63]: Facing a meaningless universe without despair
+    - button "Pragmatism William James Truth as what works, tested in the crucible of experience" [ref=e64] [cursor=pointer]:
+      - generic [ref=e65]: Pragmatism
+      - generic [ref=e66]: William James
+      - generic [ref=e67]: Truth as what works, tested in the crucible of experience
+    - button "Phenomenology Edmund Husserl Returning to the things themselves, as given in consciousness" [ref=e68] [cursor=pointer]:
+      - generic [ref=e69]: Phenomenology
+      - generic [ref=e70]: Edmund Husserl
+      - generic [ref=e71]: Returning to the things themselves, as given in consciousness
+    - button "Postmodernism Michel Foucault Power, knowledge, and the history of how we became who we are" [ref=e72] [cursor=pointer]:
+      - generic [ref=e73]: Postmodernism
+      - generic [ref=e74]: Michel Foucault
+      - generic [ref=e75]: Power, knowledge, and the history of how we became who we are
+    - button "Anarchism Mikhail Bakunin Liberty without the state, solidarity without hierarchy" [ref=e76] [cursor=pointer]:
+      - generic [ref=e77]: Anarchism
+      - generic [ref=e78]: Mikhail Bakunin
+      - generic [ref=e79]: Liberty without the state, solidarity without hierarchy
+    - button "Feminist Philosophy Simone de Beauvoir Woman as Other, and the path to becoming genuinely free" [ref=e80] [cursor=pointer]:
+      - generic [ref=e81]: Feminist Philosophy
+      - generic [ref=e82]: Simone de Beauvoir
+      - generic [ref=e83]: Woman as Other, and the path to becoming genuinely free
+    - button "Skepticism Pyrrho of Elis Suspend judgment, and find tranquility" [ref=e84] [cursor=pointer]:
+      - generic [ref=e85]: Skepticism
+      - generic [ref=e86]: Pyrrho of Elis
+      - generic [ref=e87]: Suspend judgment, and find tranquility
+  - generic [ref=e88]:
+    - button "← Menu" [ref=e90] [cursor=pointer]
+    - generic [ref=e92]:
+      - textbox "Ask a question…" [ref=e93]
+      - button "Send" [ref=e94] [cursor=pointer]

@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create *)",
+      "Bash(yes)",
+      "Bash(npx --yes create-vite@latest ascend-app --template react-ts)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npm run *)",
+      "Bash(curl -s localhost:5173)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_snapshot",
+      "Bash(powershell -Command \"Get-ChildItem -Path C:\\\\Users\\\\user -Filter 'dashboard-current.png' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 FullName\")",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_click",
+      "Bash(powershell -Command \"Get-ChildItem -Path C:\\\\Users\\\\user -Filter 'console-2026-07-20T13-37-07-628Z.log' -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1 FullName\" 2>&1)",
+      "Bash(powershell -Command \"Get-CimInstance Win32_Process -Filter \\\\\"Name='node.exe'\\\\\" | Select-Object ProcessId, CommandLine\" 2>&1)",
+      "Bash(powershell -Command \"Get-CimInstance Win32_Process -Filter \\\\\"Name='node.exe'\\\\\" | Select-Object ProcessId, ParentProcessId, CommandLine | Format-List\" 2>&1)",
+      "Bash(powershell -Command \"Stop-Process -Id 7300,20896,5184,16992 -Force -ErrorAction SilentlyContinue; Start-Sleep -Milliseconds 500; Get-CimInstance Win32_Process -Filter \\\\\"Name='node.exe'\\\\\" | Select-Object ProcessId, CommandLine\" 2>&1)",
+      "mcp__playwright__browser_type",
+      "Bash(rm -f dashboard-current.png onboarding-welcome.png reveal-screen.png dashboard-final.png)",
+      "Bash(rm -rf .playwright-mcp)"
+    ]
+  }
+}

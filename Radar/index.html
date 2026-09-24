@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RADAR // LIVE AIR TRAFFIC SCOPE</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+<div class="crt">
+  <header class="topbar">
+    <div class="brand">✈ A/C SURVEILLANCE RADAR &mdash; SCOPE 1</div>
+    <div class="clock" id="clock">00:00:00Z</div>
+  </header>
+
+  <div class="layout">
+    <div class="views">
+      <section class="scope-wrap">
+        <div class="view-label">SCOPE 1 &mdash; RADAR</div>
+        <canvas id="scope" width="800" height="800"></canvas>
+        <div class="scope-hud">
+          <div id="status">STANDBY</div>
+          <div id="trackCount">TRACKS: 0</div>
+        </div>
+      </section>
+
+      <section class="map-wrap">
+        <div class="view-label">SCOPE 2 &mdash; CHART</div>
+        <div id="leafletMap"></div>
+      </section>
+    </div>
+
+    <aside class="panel">
+      <div class="panel-block">
+        <h2>SCOPE CONTROLS</h2>
+        <label>CENTER LAT
+          <input type="number" id="centerLat" step="0.0001" value="40.6413">
+        </label>
+        <label>CENTER LON
+          <input type="number" id="centerLon" step="0.0001" value="-73.7781">
+        </label>
+        <label>RANGE (KM)
+          <input type="number" id="rangeKm" step="10" value="150">
+        </label>
+        <label>POLL (SEC)
+          <input type="number" id="pollSec" step="1" value="15" min="5">
+        </label>
+        <div class="btn-row">
+          <button id="locateBtn">USE MY LOCATION</button>
+          <button id="applyBtn">APPLY</button>
+        </div>
+      </div>
+
+      <div class="panel-block" id="detailsBlock">
+        <h2>TARGET DATA</h2>
+        <div id="noSelection">NO TARGET SELECTED &mdash; CLICK A BLIP</div>
+        <div id="details" class="hidden">
+          <div class="row"><span>CALLSIGN</span><b id="d-callsign">--</b></div>
+          <div class="row"><span>ICAO24</span><b id="d-icao">--</b></div>
+          <div class="row"><span>ORIGIN</span><b id="d-origin">--</b></div>
+          <div class="row"><span>DEST</span><b id="d-dest">--</b></div>
+          <div class="row"><span>ALTITUDE</span><b id="d-alt">--</b></div>
+          <div class="row"><span>SPEED</span><b id="d-speed">--</b></div>
+          <div class="row"><span>HEADING</span><b id="d-heading">--</b></div>
+          <div class="row"><span>COUNTRY</span><b id="d-country">--</b></div>
+          <button id="deselectBtn">CLEAR TARGET</button>
+        </div>
+      </div>
+
+      <div class="panel-block">
+        <h2>LOG</h2>
+        <div id="log" class="log"></div>
+      </div>
+    </aside>
+  </div>
+
+  <div id="detailWindow" class="detail-window hidden">
+    <div class="window-titlebar">
+      <span>◈ TARGET DETAIL WINDOW</span>
+      <button id="detailWindowClose" class="win-close" title="Close">✕</button>
+    </div>
+    <div class="window-body">
+      <div class="window-col">
+        <div class="row"><span>CALLSIGN</span><b id="w-callsign">--</b></div>
+        <div class="row"><span>ICAO24</span><b id="w-icao">--</b></div>
+        <div class="row"><span>COUNTRY</span><b id="w-country">--</b></div>
+        <div class="row"><span>ORIGIN</span><b id="w-origin">--</b></div>
+        <div class="row"><span>DESTINATION</span><b id="w-dest">--</b></div>
+        <div class="row"><span>ON GROUND</span><b id="w-ground">--</b></div>
+      </div>
+      <div class="window-col">
+        <div class="row"><span>POSITION</span><b id="w-position">--</b></div>
+        <div class="row"><span>DIST FROM SCOPE</span><b id="w-dist">--</b></div>
+        <div class="row"><span>GEOM ALTITUDE</span><b id="w-galt">--</b></div>
+        <div class="row"><span>BARO ALTITUDE</span><b id="w-balt">--</b></div>
+        <div class="row"><span>SPEED</span><b id="w-speed">--</b></div>
+        <div class="row"><span>TRACK / HEADING</span><b id="w-heading">--</b></div>
+        <div class="row"><span>VERTICAL RATE</span><b id="w-vrate">--</b></div>
+        <div class="row"><span>SQUAWK</span><b id="w-squawk">--</b></div>
+        <div class="row"><span>POSITION SOURCE</span><b id="w-src">--</b></div>
+        <div class="row"><span>LAST CONTACT</span><b id="w-contact">--</b></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

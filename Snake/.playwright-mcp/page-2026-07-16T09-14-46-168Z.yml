@@ -1,0 +1,19 @@
+- generic [ref=e2]:
+  - generic [ref=e3]: NOKIA
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e8]: SCORE 000
+      - generic [ref=e9]: HI 000
+    - generic [ref=e12]:
+      - heading "SNAKE" [level=1] [ref=e13]
+      - paragraph [ref=e14]: Arrow keys / WASD to move.Eat the squares. Don't hit the wallsor yourself.
+      - paragraph [ref=e15]: no scores yet
+      - paragraph [ref=e16]: PRESS ANY KEY OR TAP ▲ TO START
+  - generic [ref=e17]:
+    - button "Toggle sound" [ref=e18] [cursor=pointer]: "SOUND: ON"
+    - generic [ref=e19]:
+      - button "Up" [ref=e20] [cursor=pointer]: ▲
+      - button "Left" [ref=e21] [cursor=pointer]: ◀
+      - button "Pause" [ref=e22] [cursor=pointer]: II
+      - button "Right" [ref=e23] [cursor=pointer]: ▶
+      - button "Down" [ref=e24] [cursor=pointer]: ▼

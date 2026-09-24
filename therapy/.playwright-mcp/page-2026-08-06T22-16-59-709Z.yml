@@ -1,0 +1,56 @@
+- generic [ref=f2e1]:
+  - banner [ref=f2e2]:
+    - heading "How Are You Feeling?" [level=1] [ref=f2e3]
+    - paragraph [ref=f2e4]: Describe what's going on, or pick a feeling below. You'll get approaches drawn from real, cited work by recognized therapists and researchers — with links to the original source, and a note on the documented case it comes from.
+  - note [ref=f2e5]: This is educational information, not a diagnosis and not a substitute for care from a licensed therapist, counselor, or doctor. If something here resonates, that's a good reason to bring it to a professional — not a reason to skip seeing one.
+  - alert [ref=f2e27]:
+    - heading "If you're in danger right now, please reach out immediately" [level=2] [ref=f2e28]
+    - list [ref=f2e29]:
+      - listitem [ref=f2e30]:
+        - strong [ref=f2e31]: "US:"
+        - text: Call or text
+        - strong [ref=f2e32]: "988"
+        - text: (Suicide & Crisis Lifeline), available 24/7.
+      - listitem [ref=f2e33]:
+        - strong [ref=f2e34]: "US (text-based):"
+        - text: Text
+        - strong [ref=f2e35]: HOME
+        - text: to
+        - strong [ref=f2e36]: "741741"
+        - text: (Crisis Text Line).
+      - listitem [ref=f2e37]:
+        - strong [ref=f2e38]: "Outside the US:"
+        - text: Find a local crisis line via the
+        - link "International Association for Suicide Prevention's crisis center directory" [ref=f2e39] [cursor=pointer]:
+          - /url: https://www.iasp.info/resources/Crisis_Centres/
+        - text: .
+      - listitem [ref=f2e40]: If you or someone else is in immediate physical danger, call your local emergency number (e.g. 911 in the US) now.
+    - paragraph [ref=f2e41]: What follows on this page is general, educational information — it is not built for a crisis, and it is not a substitute for the resources above.
+  - main [ref=f2e6]:
+    - generic [ref=f2e7]:
+      - heading "Pick what fits, or write your own" [level=2] [ref=f2e8]
+      - generic [ref=f2e9]:
+        - button "Anxiety / Panic" [ref=f2e10] [cursor=pointer]
+        - button "Depression / Low Motivation" [ref=f2e11] [cursor=pointer]
+        - button "Grief / Bereavement" [ref=f2e12] [cursor=pointer]
+        - button "Trauma / PTSD" [ref=f2e13] [cursor=pointer]
+        - button "Relationship Conflict" [ref=f2e14] [cursor=pointer]
+        - button "Insomnia / Sleep Problems" [ref=f2e15] [cursor=pointer]
+        - button "Anger" [ref=f2e16] [cursor=pointer]
+        - button "Overwhelming Emotions / Urges to Self-Harm" [ref=f2e17] [cursor=pointer]
+        - button "Loneliness / Isolation" [ref=f2e18] [cursor=pointer]
+        - button "Feeling Lost / Loss of Meaning" [ref=f2e19] [cursor=pointer]
+        - button "Low Self-Worth / Self-Criticism" [ref=f2e20] [cursor=pointer]
+      - generic [ref=f2e21]: Or describe how you feel in your own words
+      - textbox "Or describe how you feel in your own words" [ref=f2e22]:
+        - /placeholder: e.g. I can't stop worrying about work and my heart races at night...
+        - text: I don't see the point anymore, I've been thinking about ending it all
+      - button "Show me what's been documented to help" [active] [ref=f2e23] [cursor=pointer]
+    - generic [ref=f2e43]:
+      - paragraph [ref=f2e44]: We don't have a well-sourced, linked match for exactly what you described yet. That's a gap in this site's library, not a sign nothing can help — a licensed therapist or counselor can help even where this page can't yet point to a specific documented case.
+      - generic [ref=f2e45]: None of this is a diagnosis, and it isn't personalized to you specifically — it's a summary of documented cases with similar themes. If any of it resonates, that's worth bringing to a licensed therapist or counselor who can look at your actual situation.
+  - contentinfo [ref=f2e24]:
+    - paragraph [ref=f2e25]:
+      - text: Sources are curated from peer-reviewed research and primary published works by named therapists and researchers. Nothing here is generated on the fly — every entry links to a real, checkable document. See
+      - code [ref=f2e26]: CLAUDE.md
+      - text: for the sourcing standards this site follows.

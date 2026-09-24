@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Philosopher — chat with the great thinkers</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="app-header">
+      <h1>Philosopher</h1>
+      <p class="subtitle">Pick a philosophy. Chat with its most iconic thinker.</p>
+    </header>
+
+    <section id="menu-view" class="view">
+      <div id="philosopher-grid" class="grid"></div>
+    </section>
+
+    <section id="chat-view" class="view" hidden>
+      <div class="chat-header">
+        <button id="back-btn" class="back-btn" title="Choose a different philosopher">&larr; Menu</button>
+        <div class="chat-header-info">
+          <div id="chat-name" class="chat-name"></div>
+          <div id="chat-philosophy" class="chat-philosophy"></div>
+        </div>
+      </div>
+      <div id="messages" class="messages"></div>
+      <form id="chat-form" class="chat-form">
+        <textarea id="chat-input" placeholder="Ask a question…" rows="1" autocomplete="off"></textarea>
+        <button type="submit" id="send-btn">Send</button>
+      </form>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

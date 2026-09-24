@@ -1,0 +1,37 @@
+{
+  "clip": {
+    "min_seconds": 20,
+    "max_seconds": 60,
+    "number_to_generate": 5
+  },
+  "video": {
+    "width": 1080,
+    "height": 1920
+  },
+  "captions": {
+    "enabled": true,
+    "animated": false
+  },
+  "silence_removal": {
+    "enabled": true,
+    "max_gap_kept_seconds": 0.4
+  },
+  "zoom": {
+    "enabled": false,
+    "rate_per_second": 0.015,
+    "max_zoom": 1.2
+  },
+  "youtube": {
+    "privacy": "private",
+    "max_uploads_per_day": 3,
+    "preferred_times": [
+      "09:00",
+      "13:00",
+      "18:00"
+    ]
+  },
+  "cleanup": {
+    "delete_intermediate_files": true
+  },
+  "approval_required": true
+}

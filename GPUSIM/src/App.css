@@ -1,0 +1,390 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  padding: 24px 32px 16px;
+  border-bottom: 1px solid #232734;
+}
+
+.app-header h1 {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.app-header p {
+  margin-top: 6px;
+  color: #9aa2b1;
+  font-size: 14px;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  gap: 24px;
+  padding: 24px 32px;
+  align-items: flex-start;
+}
+
+.app-sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 24px;
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- Controls panel ---------- */
+
+.controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: #161a22;
+  border: 1px solid #232734;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #c3c9d4;
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+  accent-color: #7c9cff;
+}
+
+.operation-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.operation-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #d3d8e2;
+  cursor: pointer;
+}
+
+.array-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.array-editor input[type="text"] {
+  background: #0e1116;
+  border: 1px solid #2b3040;
+  border-radius: 6px;
+  color: #e6e8eb;
+  padding: 6px 8px;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 12px;
+}
+
+.array-editor input[type="text"]:focus {
+  outline: none;
+  border-color: #7c9cff;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid #2b3040;
+  background: #1c2130;
+  color: #e6e8eb;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+button:hover:not(:disabled) {
+  background: #262c3d;
+  border-color: #3a4256;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.secondary-button {
+  background: transparent;
+}
+
+.primary-button {
+  background: #3355ff;
+  border-color: #3355ff;
+  color: white;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: #4766ff;
+}
+
+.playback-buttons {
+  flex-direction: row;
+  gap: 8px;
+}
+
+.playback-buttons button {
+  flex: 1;
+}
+
+/* ---------- Step info ---------- */
+
+.step-info {
+  background: #161a22;
+  border: 1px solid #232734;
+  border-radius: 12px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.step-info-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.step-counter {
+  font-size: 13px;
+  font-weight: 600;
+  color: #9aa2b1;
+}
+
+.phase-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.phase-compute {
+  background: rgba(124, 156, 255, 0.15);
+  color: #7c9cff;
+}
+
+.phase-reduce {
+  background: rgba(255, 176, 76, 0.15);
+  color: #ffb04c;
+}
+
+.phase-combine {
+  background: rgba(76, 222, 128, 0.15);
+  color: #4cde80;
+}
+
+.step-description {
+  font-size: 14px;
+  color: #d3d8e2;
+  line-height: 1.5;
+}
+
+/* ---------- Grid view ---------- */
+
+.grid-view {
+  background: #161a22;
+  border: 1px solid #232734;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.grid-view-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.grid-view-subtitle {
+  font-weight: 400;
+  font-size: 12px;
+  color: #9aa2b1;
+}
+
+.blocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.block {
+  border: 1px solid #2b3040;
+  border-radius: 10px;
+  padding: 10px;
+  background: #10141c;
+}
+
+.block-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #7c9cff;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 8px;
+}
+
+.threads {
+  display: grid;
+  grid-template-columns: repeat(8, 28px);
+  gap: 5px;
+}
+
+.thread {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+
+.thread-idle {
+  background: #1c2130;
+  color: #5c6577;
+  border: 1px solid #2b3040;
+}
+
+.thread-active {
+  background: #ffb04c;
+  color: #1a1200;
+  transform: scale(1.12);
+  box-shadow: 0 0 0 3px rgba(255, 176, 76, 0.25);
+}
+
+.thread-done {
+  background: rgba(124, 156, 255, 0.25);
+  color: #a9bdff;
+  border: 1px solid rgba(124, 156, 255, 0.4);
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #9aa2b1;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-swatch {
+  width: 16px;
+  height: 16px;
+  transform: none;
+}
+
+/* ---------- Data arrays ---------- */
+
+.data-arrays {
+  background: #161a22;
+  border: 1px solid #232734;
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.data-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.data-row-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9aa2b1;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.data-cells {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.data-cell {
+  min-width: 40px;
+  border-radius: 8px;
+  border: 1px solid #2b3040;
+  background: #10141c;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.data-cell-index {
+  font-size: 9px;
+  color: #5c6577;
+}
+
+.data-cell-value {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.data-cell-read {
+  border-color: #7c9cff;
+  background: rgba(124, 156, 255, 0.12);
+}
+
+.data-cell-write {
+  border-color: #4cde80;
+  background: rgba(76, 222, 128, 0.16);
+}
+
+@media (max-width: 900px) {
+  .app-body {
+    flex-direction: column;
+  }
+
+  .app-sidebar {
+    width: 100%;
+    position: static;
+  }
+}

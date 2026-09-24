@@ -1,0 +1,10 @@
+INFO:     127.0.0.1:62732 - "GET /api/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62732 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62732 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62732 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62732 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62732 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62732 - "POST /api/chat HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62732 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58209 - "POST /api/voice HTTP/1.1" 400 Bad Request
+INFO:     127.0.0.1:57020 - "POST /api/voice HTTP/1.1" 200 OK

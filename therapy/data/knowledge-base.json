@@ -1,0 +1,125 @@
+[
+  {
+    "id": "anxiety-panic",
+    "label": "Anxiety / Panic",
+    "tags": ["anxious", "anxiety", "panic", "panic attack", "racing heart", "can't breathe", "on edge", "worried", "worry", "fear of losing control", "nervous"],
+    "therapist": "David H. Barlow (with Michelle Craske, Jerome Cerny, Janet Klosko)",
+    "modality": "Cognitive-behavioral Panic Control Treatment (interoceptive exposure + cognitive restructuring)",
+    "source": "Barlow, D.H., Craske, M.G., Cerny, J.A., & Klosko, J.S. (1989). Behavioral treatment of panic disorder. Behavior Therapy, 20(2), 261–282.",
+    "link": "https://www.sciencedirect.com/science/article/abs/pii/S0005789489800735",
+    "secondaryLink": "https://pubmed.ncbi.nlm.nih.gov/16649882/",
+    "secondaryLabel": "2-year follow-up study (PubMed)",
+    "caseSummary": "People with panic disorder (without significant agoraphobia) were randomly assigned to exposure to the bodily sensations of panic combined with cognitive therapy, to relaxation training, to a combination, or to a wait-list. In the conditions that included exposure to bodily sensations plus cognitive therapy, 85% or more of participants were panic-free by the end of treatment, far above the wait-list group.",
+    "caveats": "The original sample excluded people with significant agoraphobic avoidance, and long-term maintenance varied between individuals in later follow-up work."
+  },
+  {
+    "id": "depression-low-motivation",
+    "label": "Depression / Low Motivation",
+    "tags": ["depressed", "depression", "low motivation", "unmotivated", "hopeless", "sad", "no energy", "worthless", "empty", "numb"],
+    "therapist": "Aaron T. Beck (with A. John Rush, Brian F. Shaw, Gary Emery)",
+    "modality": "Cognitive Therapy (CT) for depression",
+    "source": "Beck, A.T., Rush, A.J., Shaw, B.F., & Emery, G. (1979). Cognitive Therapy of Depression. Guilford Press.",
+    "link": "https://pubmed.ncbi.nlm.nih.gov/11982561/",
+    "caseSummary": "This foundational text formalized Beck's approach of identifying and testing automatic negative thoughts (e.g. \"I'm a failure,\" \"nothing will help\") and pairing that with behavioral activation. Beck's earlier clinical trials with depressed outpatients found cognitive therapy performed as well as or better than medication alone in that population.",
+    "caveats": "The original studies focused on outpatient, moderately depressed adults; severe or psychotic depression typically needs combined treatment with medical supervision."
+  },
+  {
+    "id": "grief-bereavement",
+    "label": "Grief / Bereavement",
+    "tags": ["grief", "grieving", "bereavement", "loss", "someone died", "lost my", "mourning", "widow", "widower"],
+    "therapist": "Irvin D. Yalom & Morton A. Lieberman",
+    "modality": "Existential / interpersonal group therapy for bereavement",
+    "source": "Yalom, I.D., & Lieberman, M.A. (1991). Bereavement and heightened existential awareness. Psychiatry, 54(4), 334–345.",
+    "link": "https://pubmed.ncbi.nlm.nih.gov/1788364/",
+    "caseSummary": "Widows and widowers in the first few months of bereavement joined an eight-meeting support group. Those who engaged directly with existential questions raised by the loss — mortality, identity, isolation, responsibility for the future — rather than avoiding them, tended to show more psychological growth over time than those who avoided these themes.",
+    "caveats": "The study sample was a nonclinical community group of bereaved spouses, not people with complicated or prolonged grief disorder, who often need individual treatment."
+  },
+  {
+    "id": "trauma-ptsd",
+    "label": "Trauma / PTSD",
+    "tags": ["trauma", "traumatized", "ptsd", "flashback", "flashbacks", "nightmares", "hypervigilant", "on edge", "triggered"],
+    "therapist": "Bessel A. van der Kolk",
+    "modality": "EMDR (Eye Movement Desensitization and Reprocessing)",
+    "source": "van der Kolk, B.A., Spinazzola, J., Blaustein, M.E., et al. (2007). A randomized clinical trial of eye movement desensitization and reprocessing (EMDR), fluoxetine, and pill placebo in the treatment of posttraumatic stress disorder. Journal of Clinical Psychiatry, 68(1), 37–46.",
+    "link": "https://www.besselvanderkolk.com/uploads/docs/emdrjcpfinalpage_proofspdf.pdf",
+    "caseSummary": "Adults with PTSD (some with trauma beginning in childhood, some in adulthood) were randomly assigned to EMDR, the antidepressant fluoxetine, or a pill placebo. EMDR outperformed both, and among participants whose trauma began in adulthood, most no longer met criteria for PTSD after treatment.",
+    "caveats": "Participants whose trauma began in childhood improved more slowly and needed more sessions — a reminder that the length and complexity of a trauma history affects how treatment unfolds."
+  },
+  {
+    "id": "relationship-conflict",
+    "label": "Relationship Conflict",
+    "tags": ["relationship", "relationship conflict", "partner", "marriage", "breakup", "fighting with my partner", "disconnected from my partner"],
+    "therapist": "Susan M. Johnson",
+    "modality": "Emotionally Focused Therapy (EFT) for couples",
+    "source": "Dalton, E.J., Greenman, P.S., Classen, C.C., & Johnson, S.M. (2013/2018 line of work). Randomized controlled trial of emotionally focused couple therapy compared to treatment as usual for depression: Outcomes and mechanisms of change.",
+    "link": "https://pubmed.ncbi.nlm.nih.gov/30105808/",
+    "caseSummary": "Couples in which one partner had depression were randomly assigned to Emotionally Focused Therapy or usual couple counseling. Couples in EFT showed greater gains in relationship satisfaction, and men in EFT showed greater improvement in depressive symptoms — consistent with EFT's core idea that repairing emotional accessibility and responsiveness between partners drives change.",
+    "caveats": "This particular trial was small (16 couples), so treat it as an early, focused proof-of-concept on the relationship-depression link rather than a broad guarantee for all relationship conflict."
+  },
+  {
+    "id": "insomnia",
+    "label": "Insomnia / Sleep Problems",
+    "tags": ["insomnia", "can't sleep", "sleep problems", "sleepless", "trouble sleeping", "not sleeping"],
+    "therapist": "Charles M. Morin",
+    "modality": "Cognitive Behavioral Therapy for Insomnia (CBT-I)",
+    "source": "Morin, C.M., Colecchi, C., Stone, J., Sood, R., & Brink, D. (1999). Behavioral and pharmacological therapies for late-life insomnia: A randomized controlled trial. JAMA, 281(11), 991–999.",
+    "link": "https://pubmed.ncbi.nlm.nih.gov/10086433/",
+    "caseSummary": "Older adults with chronic insomnia were randomly assigned to behavioral therapy (stimulus control and sleep restriction techniques), medication, both combined, or placebo. Behavioral therapy produced the most durable improvements in sleep, and outperformed medication alone at 2-year follow-up.",
+    "caveats": "The trial focused on late-life, chronic insomnia specifically; combining medication with behavioral therapy showed strong short-term but less durable long-term gains than behavioral therapy alone."
+  },
+  {
+    "id": "anger",
+    "label": "Anger",
+    "tags": ["anger", "angry", "rage", "irritable", "temper", "losing my temper", "furious"],
+    "therapist": "Raymond W. Novaco (with Claude Chemtob)",
+    "modality": "Cognitive-behavioral anger management (stress inoculation)",
+    "source": "Chemtob, C.M., Novaco, R.W., Hamada, R.S., & Gross, D.M. (1997). Cognitive-behavioral treatment for severe anger in posttraumatic stress disorder. Journal of Consulting and Clinical Psychology, 65(1), 184–189.",
+    "link": "https://pubmed.ncbi.nlm.nih.gov/9103748/",
+    "caseSummary": "Combat veterans with PTSD and severe anger problems were randomly assigned to a 12-session cognitive-behavioral anger treatment (self-monitoring of triggers, cognitive reframing, arousal-reduction skills, and rehearsed coping for provocation) or routine clinical care. The treatment group showed significant improvement in anger control and anger reactions, sustained at 18-month follow-up.",
+    "caveats": "This trial studied anger tightly linked to combat trauma in a small group of veterans; anger unconnected to trauma may respond somewhat differently."
+  },
+  {
+    "id": "emotional-dysregulation",
+    "label": "Overwhelming Emotions / Urges to Self-Harm",
+    "tags": ["self harm", "self-harm", "urge to hurt myself", "overwhelmed by emotions", "emotional dysregulation", "cutting", "can't control my emotions"],
+    "therapist": "Marsha M. Linehan",
+    "modality": "Dialectical Behavior Therapy (DBT)",
+    "source": "Linehan, M.M., Armstrong, H.E., Suarez, A., Allmon, D., & Heard, H.L. (1991). Cognitive-behavioral treatment of chronically parasuicidal borderline patients. Archives of General Psychiatry, 48(12), 1060–1064.",
+    "link": "https://pubmed.ncbi.nlm.nih.gov/1845222/",
+    "caseSummary": "Women with a chronic pattern of self-harm and suicidality who met criteria for borderline personality disorder were randomly assigned to a year of DBT (combining mindfulness, distress tolerance, emotion regulation, and interpersonal effectiveness skills) or treatment-as-usual in the community. DBT roughly halved the rate of self-harm incidents and reduced psychiatric hospital days, in a population that had often been considered very difficult to treat.",
+    "caveats": "DBT is a structured, typically months-to-a-year program combining individual therapy and skills groups, not a quick technique. If you are currently having urges to harm yourself, please see the crisis resources on this page — this entry describes a longer-term treatment approach, not immediate crisis care."
+  },
+  {
+    "id": "loneliness-isolation",
+    "label": "Loneliness / Isolation",
+    "tags": ["lonely", "loneliness", "isolated", "no friends", "disconnected", "alone"],
+    "therapist": "John T. Cacioppo (with Christopher Masi, Hsi-Yuan Chen, Louise Hawkley)",
+    "modality": "Meta-analysis of loneliness-reduction interventions, focused on maladaptive social cognition",
+    "source": "Masi, C.M., Chen, H-Y., Hawkley, L.C., & Cacioppo, J.T. (2011). A meta-analysis of interventions to reduce loneliness. Personality and Social Psychology Review, 15(3), 219–266.",
+    "link": "https://journals.sagepub.com/doi/10.1177/1088868310377394",
+    "caseSummary": "Reviewing decades of loneliness-intervention studies, the authors found that programs addressing maladaptive social cognition — the tendency of lonely people to expect and perceive rejection, which can become self-fulfilling — produced larger improvements than programs that only increased opportunities for social contact or taught social skills alone.",
+    "caveats": "This is a meta-analytic synthesis across many smaller studies of varying quality rather than a single clinical trial; effect sizes varied considerably by study."
+  },
+  {
+    "id": "existential-loss-of-meaning",
+    "label": "Feeling Lost / Loss of Meaning",
+    "tags": ["meaningless", "no purpose", "lost", "empty", "what's the point", "existential", "purposeless"],
+    "therapist": "Viktor E. Frankl",
+    "modality": "Logotherapy (meaning-centered therapy)",
+    "source": "Frankl, V.E. (1959/1962). Man's Search for Meaning: An Introduction to Logotherapy.",
+    "link": "https://archive.org/details/manssearchformea0000vikt_p4r6",
+    "caseSummary": "Drawing on his clinical observations as a psychiatrist, including during his imprisonment in Nazi concentration camps, Frankl described how people who could locate some personal sense of meaning or purpose — even amid extreme suffering — showed greater psychological resilience than those who could not. This became the basis for logotherapy's focus on helping people identify what still holds meaning for them.",
+    "caveats": "The original evidence here is clinical and observational/historical rather than a randomized trial. Later, more formal approaches building on this idea (e.g. meaning-centered psychotherapy for cancer patients) have since been tested in controlled studies."
+  },
+  {
+    "id": "low-self-worth",
+    "label": "Low Self-Worth / Self-Criticism",
+    "tags": ["low self esteem", "self worth", "hate myself", "not good enough", "self critical", "worthless", "self-esteem"],
+    "therapist": "Carl R. Rogers",
+    "modality": "Person-Centered Therapy (unconditional positive regard, empathy, genuineness)",
+    "source": "Rogers, C.R., & Dymond, R.F. (Eds.). (1954). Psychotherapy and Personality Change. University of Chicago Press. (The case of \"Mrs. Oak\")",
+    "link": "https://archive.org/details/psychotherapyper0000unse_x7a4",
+    "caseSummary": "\"Mrs. Oak,\" a client in an extended course of person-centered therapy (47 recorded sessions), gradually moved from talking about external problems toward acknowledging and accepting previously denied feelings about herself, as she experienced the therapy relationship as consistently non-judgmental and safe. This case became one of the primary illustrations of how the therapeutic relationship itself — not just techniques — can drive change in how someone sees themselves.",
+    "caveats": "This is a single in-depth case study, useful for illustrating the approach and the reasoning behind it rather than as standalone statistical proof of how well it works for everyone."
+  }
+]

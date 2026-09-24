@@ -1,0 +1,312 @@
+:root {
+  --phosphor: #00ff41;
+  --phosphor-dim: #0a5c1e;
+  --phosphor-bright: #7dffa0;
+  --bg: #010a02;
+  --amber: #ffb000;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  color: var(--phosphor);
+  font-family: "Courier New", ui-monospace, monospace;
+  height: 100%;
+}
+
+.crt {
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  overflow: hidden;
+}
+
+/* CRT scanline + vignette overlay */
+.crt::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 2px,
+    transparent 3px
+  );
+  z-index: 50;
+}
+
+.crt::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.75) 100%);
+  z-index: 51;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--phosphor-dim);
+  text-shadow: 0 0 6px var(--phosphor);
+  letter-spacing: 2px;
+}
+
+.brand { font-size: 14px; }
+.clock { font-size: 14px; color: var(--phosphor-bright); }
+
+.layout {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  align-items: flex-start;
+}
+
+.views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.scope-wrap,
+.map-wrap {
+  position: relative;
+  flex: 0 0 auto;
+  border: 2px solid var(--phosphor-dim);
+  border-radius: 6px;
+  box-shadow: 0 0 25px rgba(0, 255, 65, 0.15) inset, 0 0 15px rgba(0, 255, 65, 0.2);
+  background: #000;
+}
+
+#scope {
+  display: block;
+  width: 520px;
+  height: 520px;
+  max-width: 80vw;
+  max-height: 80vw;
+  border-radius: 4px;
+}
+
+#leafletMap {
+  width: 520px;
+  height: 520px;
+  max-width: 80vw;
+  max-height: 80vw;
+  border-radius: 4px;
+  background: #000;
+}
+
+.view-label {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--phosphor-bright);
+  text-shadow: 0 0 6px var(--phosphor);
+  z-index: 500;
+  pointer-events: none;
+}
+
+.scope-hud {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px var(--phosphor);
+  pointer-events: none;
+  z-index: 500;
+}
+
+.scope-hud div { margin-bottom: 4px; }
+
+/* Push the default Leaflet basemap toward the green-phosphor palette */
+#leafletMap .leaflet-tile-pane {
+  filter: saturate(0) brightness(0.8) sepia(1) hue-rotate(70deg) saturate(4) brightness(0.7);
+}
+
+#leafletMap .leaflet-control-attribution {
+  background: rgba(0, 10, 2, 0.7) !important;
+  color: var(--phosphor-dim) !important;
+  font-size: 9px !important;
+}
+#leafletMap .leaflet-control-attribution a { color: var(--phosphor-dim) !important; }
+
+#leafletMap .leaflet-control-zoom a {
+  background: #001a06 !important;
+  color: var(--phosphor) !important;
+  border: 1px solid var(--phosphor-dim) !important;
+}
+
+.aircraft-popup .leaflet-popup-content-wrapper {
+  background: #001a06;
+  color: var(--phosphor);
+  border: 1px solid var(--phosphor);
+  border-radius: 2px;
+  font-family: "Courier New", ui-monospace, monospace;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+}
+.aircraft-popup .leaflet-popup-tip { background: #001a06; }
+.aircraft-popup b { color: var(--phosphor-bright); }
+
+/* Floating detail window (90s dialog box) — position is set in JS (draggable) */
+.detail-window {
+  position: fixed;
+  top: 90px;
+  left: 90px;
+  width: 560px;
+  max-width: 92vw;
+  background: #010f04;
+  border: 1px solid var(--phosphor);
+  box-shadow: 0 0 25px rgba(0, 255, 65, 0.35), 0 0 60px rgba(0, 255, 65, 0.12);
+  z-index: 2000; /* Leaflet's internal panes use inline z-index up to ~700 and aren't scoped to their own stacking context, so this must clear that */
+}
+
+.detail-window.hidden { display: none; }
+
+.window-titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--phosphor);
+  color: #001a06;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  padding: 6px 10px;
+  text-shadow: none;
+  cursor: move;
+  user-select: none;
+  touch-action: none;
+}
+
+.win-close {
+  background: #001a06;
+  color: var(--phosphor);
+  border: 1px solid #001a06;
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+.win-close:hover { background: #000; }
+
+.window-body {
+  display: flex;
+  gap: 24px;
+  padding: 14px 18px;
+  flex-wrap: wrap;
+}
+
+.window-col {
+  flex: 1 1 220px;
+  min-width: 220px;
+}
+
+.window-body .row {
+  font-size: 12px;
+}
+
+.panel {
+  flex: 1 1 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 280px;
+}
+
+.panel-block {
+  border: 1px solid var(--phosphor-dim);
+  padding: 12px 14px;
+  background: rgba(0, 40, 10, 0.15);
+}
+
+.panel-block h2 {
+  margin: 0 0 10px 0;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--phosphor-bright);
+  text-shadow: 0 0 6px var(--phosphor);
+  border-bottom: 1px dashed var(--phosphor-dim);
+  padding-bottom: 6px;
+}
+
+label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+input {
+  background: #001a06;
+  border: 1px solid var(--phosphor-dim);
+  color: var(--phosphor);
+  font-family: inherit;
+  padding: 4px 6px;
+  width: 110px;
+}
+
+input:focus { outline: none; border-color: var(--phosphor); }
+
+button {
+  background: #001a06;
+  border: 1px solid var(--phosphor);
+  color: var(--phosphor);
+  font-family: inherit;
+  letter-spacing: 1px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+button:hover {
+  background: var(--phosphor-dim);
+  color: #000;
+}
+
+.btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+#noSelection {
+  font-size: 12px;
+  color: var(--phosphor-dim);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  padding: 3px 0;
+  border-bottom: 1px dotted rgba(0, 255, 65, 0.15);
+}
+
+.row span { color: var(--phosphor-dim); }
+.row b { color: var(--phosphor-bright); font-weight: normal; }
+
+.hidden { display: none; }
+
+.log {
+  font-size: 11px;
+  color: var(--phosphor-dim);
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#deselectBtn { margin-top: 10px; width: 100%; }

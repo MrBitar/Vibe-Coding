@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C.E.D.S. // City Emergency Dispatch System</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/windows.css">
+<link rel="stylesheet" href="css/departments.css">
+</head>
+<body>
+
+<div class="crt-overlay"></div>
+
+<!-- ===================== BOOT SCREEN ===================== -->
+<div id="boot-screen" class="boot-screen">
+  <pre id="boot-text" class="boot-text"></pre>
+  <button id="start-shift-btn" class="boot-start-btn hidden">&gt; START SHIFT_</button>
+  <button id="boot-highscores-btn" class="boot-ghost-btn hidden">VIEW HIGH SCORES</button>
+</div>
+
+<!-- ===================== DESKTOP ===================== -->
+<div id="desktop" class="desktop hidden">
+
+  <div class="desktop-icons">
+    <button class="desktop-icon" data-open="police">
+      <span class="icon-glyph">&#9733;</span><span>POLICE.SYS</span>
+    </button>
+    <button class="desktop-icon" data-open="fire">
+      <span class="icon-glyph">&#9650;</span><span>FIRE.SYS</span>
+    </button>
+    <button class="desktop-icon" data-open="ambulance">
+      <span class="icon-glyph">&#10010;</span><span>EMS.SYS</span>
+    </button>
+    <button class="desktop-icon" data-open="map">
+      <span class="icon-glyph">&#8982;</span><span>MAP.SYS</span>
+    </button>
+  </div>
+
+  <!-- ---------- Status HUD ---------- -->
+  <div id="hud" class="hud">
+    <div class="hud-row"><span>SHIFT</span><span id="hud-case-index">0</span><span>/</span><span id="hud-case-total">0</span></div>
+    <div class="hud-row"><span>SCORE</span><span id="hud-score">0</span></div>
+    <div class="hud-row"><span>SAVED</span><span id="hud-saved">0</span><span>FAILED</span><span id="hud-failed">0</span></div>
+  </div>
+
+  <!-- ---------- Windows ---------- -->
+  <div id="win-police" class="win" data-dept="police">
+    <div class="win-titlebar">
+      <span class="win-title">POLICE.SYS — Dispatch Terminal</span>
+      <div class="win-controls">
+        <button class="win-btn win-min" data-action="minimize">_</button>
+        <button class="win-btn win-max" data-action="maximize">&#9723;</button>
+        <button class="win-btn win-close" data-action="close">&times;</button>
+      </div>
+    </div>
+    <div class="win-body dept-body" id="body-police"></div>
+    <div class="win-resize-handle"></div>
+  </div>
+
+  <div id="win-fire" class="win" data-dept="fire">
+    <div class="win-titlebar">
+      <span class="win-title">FIRE.SYS — Dispatch Terminal</span>
+      <div class="win-controls">
+        <button class="win-btn win-min" data-action="minimize">_</button>
+        <button class="win-btn win-max" data-action="maximize">&#9723;</button>
+        <button class="win-btn win-close" data-action="close">&times;</button>
+      </div>
+    </div>
+    <div class="win-body dept-body" id="body-fire"></div>
+    <div class="win-resize-handle"></div>
+  </div>
+
+  <div id="win-ambulance" class="win" data-dept="ambulance">
+    <div class="win-titlebar">
+      <span class="win-title">EMS.SYS — Dispatch Terminal</span>
+      <div class="win-controls">
+        <button class="win-btn win-min" data-action="minimize">_</button>
+        <button class="win-btn win-max" data-action="maximize">&#9723;</button>
+        <button class="win-btn win-close" data-action="close">&times;</button>
+      </div>
+    </div>
+    <div class="win-body dept-body" id="body-ambulance"></div>
+    <div class="win-resize-handle"></div>
+  </div>
+
+  <div id="win-map" class="win win-map-window" data-dept="map">
+    <div class="win-titlebar">
+      <span class="win-title">MAP.SYS — City Grid &amp; Unit Control</span>
+      <div class="win-controls">
+        <button class="win-btn win-min" data-action="minimize">_</button>
+        <button class="win-btn win-max" data-action="maximize">&#9723;</button>
+        <button class="win-btn win-close" data-action="close">&times;</button>
+      </div>
+    </div>
+    <div class="win-body map-body" id="body-map"></div>
+    <div class="win-resize-handle"></div>
+  </div>
+
+  <!-- ---------- Taskbar ---------- -->
+  <div class="taskbar">
+    <div class="taskbar-start">C.E.D.S.</div>
+    <div class="taskbar-buttons" id="taskbar-buttons"></div>
+    <div class="taskbar-tray">
+      <button id="mute-btn" class="tray-btn" title="Toggle sound">&#9834;</button>
+      <button id="highscores-btn" class="tray-btn" title="High Scores">&#9733;</button>
+      <span id="taskbar-clock" class="tray-clock">00:00:00</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== RESULTS / LEADERBOARD MODAL ===================== -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div id="modal-content" class="modal-content"></div>
+</div>
+
+<script src="js/audio.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/windowManager.js"></script>
+<script src="js/cases.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/map.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Precinct Pairs — Police Memory Match</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='75' font-size='80'%3E%F0%9F%9B%A1%EF%B8%8F%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===================== HOME / MENU SCREEN ===================== -->
+  <section id="screen-menu" class="screen active">
+    <div class="menu-card">
+      <div class="brand">
+        <div class="badge-emblem" aria-hidden="true">
+          <svg viewBox="0 0 200 200" class="badge-svg">
+            <polygon points="100,6 122,40 163,34 158,76 195,95 158,114 163,156 122,150 100,184 78,150 37,156 42,114 5,95 42,76 37,34 78,40"/>
+            <circle cx="100" cy="95" r="52" class="badge-inner"/>
+            <text x="100" y="112" class="badge-star" text-anchor="middle">★</text>
+          </svg>
+        </div>
+        <h1>PRECINCT <span>PAIRS</span></h1>
+        <p class="tagline">Case file matching division — find every pair, close the case.</p>
+      </div>
+
+      <div class="difficulty-picker">
+        <h2>Choose your beat</h2>
+        <div class="diff-options" role="radiogroup" aria-label="Difficulty">
+          <button class="diff-btn" data-diff="easy" data-size="2" role="radio" aria-checked="false">
+            <span class="diff-grid">2×2</span>
+            <span class="diff-name">Easy</span>
+            <span class="diff-sub">Rookie beat</span>
+          </button>
+          <button class="diff-btn" data-diff="medium" data-size="4" role="radio" aria-checked="false">
+            <span class="diff-grid">4×4</span>
+            <span class="diff-name">Medium</span>
+            <span class="diff-sub">Patrol officer</span>
+          </button>
+          <button class="diff-btn" data-diff="hard" data-size="6" role="radio" aria-checked="false">
+            <span class="diff-grid">6×6</span>
+            <span class="diff-name">Hard</span>
+            <span class="diff-sub">Detective</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="menu-actions">
+        <button id="btn-play" class="btn btn-primary" disabled>Start Case</button>
+        <button id="btn-scores" class="btn btn-secondary">High Scores</button>
+        <button id="btn-sound" class="btn btn-icon" aria-pressed="false" title="Toggle sound">🔊</button>
+      </div>
+
+      <div class="mini-leaderboard" id="mini-leaderboard" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ===================== GAME SCREEN ===================== -->
+  <section id="screen-game" class="screen">
+    <header class="game-header">
+      <button id="btn-back" class="btn btn-ghost" title="Back to menu">&larr; Menu</button>
+      <div class="hud">
+        <div class="hud-item">
+          <span class="hud-label">Beat</span>
+          <span class="hud-value" id="hud-diff">Easy</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Moves</span>
+          <span class="hud-value" id="hud-moves">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Time</span>
+          <span class="hud-value" id="hud-time">00:00</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Pairs</span>
+          <span class="hud-value"><span id="hud-pairs-found">0</span>/<span id="hud-pairs-total">2</span></span>
+        </div>
+      </div>
+      <button id="btn-restart" class="btn btn-ghost" title="Restart this case">⟲ Restart</button>
+    </header>
+
+    <main id="board-wrap" class="board-wrap">
+      <div id="board" class="board"></div>
+    </main>
+  </section>
+
+  <!-- ===================== HIGH SCORES SCREEN ===================== -->
+  <section id="screen-scores" class="screen">
+    <div class="scores-card">
+      <h2>Precinct Leaderboard</h2>
+      <div class="score-tabs" role="tablist">
+        <button class="score-tab active" data-tab="easy" role="tab">Easy · 2×2</button>
+        <button class="score-tab" data-tab="medium" role="tab">Medium · 4×4</button>
+        <button class="score-tab" data-tab="hard" role="tab">Hard · 6×6</button>
+      </div>
+      <div id="score-panels"></div>
+      <button id="btn-scores-back" class="btn btn-secondary">Back to Menu</button>
+    </div>
+  </section>
+
+  <!-- ===================== WIN OVERLAY ===================== -->
+  <div id="overlay-win" class="overlay">
+    <div class="win-card">
+      <div class="win-badge" aria-hidden="true">🏅</div>
+      <h2 id="win-title">Case Closed!</h2>
+      <p class="win-sub">Nice detective work.</p>
+      <div class="win-stats">
+        <div class="win-stat"><span class="win-stat-label">Moves</span><span class="win-stat-value" id="win-moves">0</span></div>
+        <div class="win-stat"><span class="win-stat-label">Time</span><span class="win-stat-value" id="win-time">00:00</span></div>
+      </div>
+
+      <div id="win-newscore" class="win-newscore hidden">
+        <p class="win-newscore-label">🚨 New high score! Log your badge name:</p>
+        <div class="win-name-row">
+          <input id="win-name" type="text" maxlength="16" placeholder="Officer name" autocomplete="off">
+          <button id="btn-save-score" class="btn btn-primary btn-sm">Save</button>
+        </div>
+      </div>
+
+      <div class="win-actions">
+        <button id="btn-play-again" class="btn btn-primary">Play Again</button>
+        <button id="btn-win-menu" class="btn btn-secondary">Menu</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="js/storage.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

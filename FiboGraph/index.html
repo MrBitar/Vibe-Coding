@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<!-- This line tells the browser the page looks good on phones and tablets too, not just desktop monitors. -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fibonacci Visualizer</title>
+
+<style>
+  /* ============================================================
+     COLOR VARIABLES ("CSS custom properties")
+     ------------------------------------------------------------
+     Think of these like labelled paint cans. Instead of writing
+     the same color code (like #2a78d6) over and over everywhere
+     in the file, we give it one name ("--series-1") and paint
+     with the name. If we ever want to change the blue used for
+     bars, we only change it here in ONE place, and every bar in
+     the whole page updates automatically.
+
+     We define one set of cans for "light mode" (bright background,
+     like most websites during the day) and a second, different set
+     for "dark mode" (dark background, easier on the eyes at night).
+     The browser tells us which one the user's operating system
+     prefers, and we also add a manual toggle button so the user can
+     override that choice themselves.
+     ============================================================ */
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb; /* the background color the chart sits on */
+    --page-plane:     #f9f9f7; /* the background color behind everything */
+    --text-primary:   #0b0b0b; /* main text color, high contrast */
+    --text-secondary: #52514e; /* slightly softer text color */
+    --text-muted:     #898781; /* faint text, used for axis ticks */
+    --gridline:       #e1e0d9; /* very light lines behind the data */
+    --baseline:       #c3c2b7; /* the solid line the bars stand on */
+    --border:         rgba(11,11,11,0.10);
+    --series-1:       #2a78d6; /* blue   - main data color */
+    --series-2:       #1baf7a; /* aqua   - second data color (used sparingly) */
+    --seq-100:        #cde2fb; /* lightest step of the blue "sequential ramp" */
+    --seq-250:        #86b6ef;
+    --seq-400:        #3987e5;
+    --seq-550:        #1c5cab;
+    --seq-700:        #0d366b; /* darkest step of the blue ramp */
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-1:       #3987e5;
+      --series-2:       #199e70;
+      --seq-100:        #cde2fb;
+      --seq-250:        #86b6ef;
+      --seq-400:        #3987e5;
+      --seq-550:        #1c5cab;
+      --seq-700:        #0d366b;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --page-plane:     #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --baseline:       #383835;
+    --border:         rgba(255,255,255,0.10);
+    --series-1:       #3987e5;
+    --series-2:       #199e70;
+  }
+
+  /* Basic page reset so every browser starts from the same blank slate. */
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page-plane);
+    color: var(--text-primary);
+  }
+
+  .app {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 20px 64px;
+  }
+
+  .app h1 {
+    font-size: 24px;
+    margin: 0 0 4px;
+  }
+  .app p.subtitle {
+    color: var(--text-secondary);
+    margin: 0 0 24px;
+    font-size: 14px;
+  }
+
+  /* The row of controls (min, max, dropdown, buttons) sits above the chart. */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .field input[type="number"],
+  .field select {
+    font: inherit;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    color: var(--text-primary);
+    min-width: 140px;
+  }
+  .field.grow select { min-width: 260px; }
+
+  button.ghost-btn {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 9px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  button.ghost-btn:hover { background: var(--gridline); }
+
+  .error-msg {
+    color: #d03b3b;
+    font-size: 13px;
+    margin: -8px 0 16px;
+    min-height: 16px;
+  }
+
+  /* The card that frames the canvas drawing. */
+  .chart-card {
+    position: relative;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .chart-card h2 {
+    font-size: 15px;
+    margin: 0 0 2px;
+  }
+  .chart-card p.caption {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0 0 12px;
+  }
+
+  canvas#chart {
+    width: 100%;
+    height: 420px;
+    display: block;
+    cursor: crosshair;
+  }
+
+  /* The little floating box that appears when you hover over the chart. */
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--text-primary);
+    color: var(--surface-1);
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transform: translate(-50%, -120%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.08s ease-out;
+    z-index: 5;
+  }
+  .tooltip.visible { opacity: 1; }
+
+  /* The legend row (color dot + word) that appears only when 2+ series exist. */
+  .legend {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .legend .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  details.table-wrap {
+    margin-top: 16px;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+  }
+  details.table-wrap summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums; /* keeps number columns lined up neatly */
+  }
+  table.data-table th, table.data-table td {
+    text-align: right;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--gridline);
+  }
+  table.data-table th:first-child, table.data-table td:first-child { text-align: left; }
+</style>
+</head>
+<body>
+
+<div class="app viz-root" id="appRoot">
+
+  <h1>Fibonacci Visualizer</h1>
+  <p class="subtitle">
+    Pick a minimum and maximum term of the Fibonacci sequence, then choose how you want to see it drawn.
+  </p>
+
+  <!-- ============================================================
+       CONTROLS
+       These are the on-screen "knobs" the user touches:
+       - Min index: where the sequence starts (0 = the very first Fibonacci number)
+       - Max index: where the sequence stops
+       - Graph dropdown: which of the three drawings to show
+       - Theme button: swap between light and dark colors
+       ============================================================ -->
+  <div class="controls">
+    <div class="field">
+      <label for="minIndex">Min term (n)</label>
+      <input type="number" id="minIndex" value="0" min="0" max="49" />
+    </div>
+    <div class="field">
+      <label for="maxIndex">Max term (n)</label>
+      <input type="number" id="maxIndex" value="15" min="1" max="50" />
+    </div>
+    <div class="field grow">
+      <label for="graphSelect">Choose a graph</label>
+      <select id="graphSelect">
+        <option value="default">Default chart (bar values)</option>
+        <option value="algo">Algorithm view (ratio &#8594; golden ratio)</option>
+        <option value="spiral">Spiral grid (photography composition)</option>
+      </select>
+    </div>
+    <button class="ghost-btn" id="themeToggle" type="button">Toggle dark mode</button>
+  </div>
+  <div class="error-msg" id="errorMsg"></div>
+
+  <!-- ============================================================
+       THE DRAWING SURFACE
+       A <canvas> is just a blank rectangle that JavaScript can draw
+       shapes, lines and text onto, pixel by pixel, like a digital
+       piece of paper. Everything you see in the three graphs below
+       is drawn by our own code, not by an image file.
+       ============================================================ -->
+  <div class="chart-card">
+    <h2 id="chartTitle">Default chart</h2>
+    <p class="caption" id="chartCaption"></p>
+    <canvas id="chart"></canvas>
+    <div class="tooltip" id="tooltip"></div>
+    <div class="legend" id="legend" style="display:none;"></div>
+  </div>
+
+  <!-- An accessible plain-text/table fallback of the exact same data,
+       for screen readers or anyone who prefers numbers over pictures. -->
+  <details class="table-wrap">
+    <summary>Show data table</summary>
+    <table class="data-table" id="dataTable">
+      <thead>
+        <tr><th>n</th><th>F(n)</th><th>F(n)/F(n-1)</th></tr>
+      </thead>
+      <tbody id="dataTableBody"></tbody>
+    </table>
+  </details>
+
+</div>
+
+<script>
+/* ================================================================
+   FIBONACCI VISUALIZER - MAIN SCRIPT
+   ----------------------------------------------------------------
+   This is plain JavaScript (the language web browsers understand).
+   Nothing here needs to be installed or compiled - you can open this
+   very file in any modern browser and it will just work.
+
+   The script is organized into clearly labelled sections:
+     1. Math helpers      - compute the Fibonacci numbers themselves
+     2. DOM references    - grab handles to the HTML elements above
+     3. Canvas setup      - make the drawing surface crisp on any screen
+     4. Three draw functions, one per graph style
+     5. Interaction       - mouse hovering + tooltips
+     6. Wiring it together - read the controls and redraw on change
+   ================================================================ */
+
+/* ----------------------------------------------------------------
+   SECTION 1: MATH HELPERS
+   ---------------------------------------------------------------- */
+
+/**
+ * Builds the Fibonacci sequence from term 0 up to and including term
+ * `maxN`. Term 0 is defined as 0, term 1 is defined as 1, and every
+ * term after that is the sum of the two terms before it
+ * (that is the entire "Fibonacci rule": F(n) = F(n-1) + F(n-2)).
+ *
+ * We keep every value as a normal JavaScript number (not the special
+ * "BigInt" type) because we cap maxN at 50, and F(50) is still small
+ * enough (about 12.5 million) for normal numbers to store it exactly.
+ */
+function buildFibonacciSequence(maxN) {
+  const sequence = [0, 1];
+  for (let n = 2; n <= maxN; n++) {
+    sequence.push(sequence[n - 1] + sequence[n - 2]);
+  }
+  return sequence;
+}
+
+/** The golden ratio, phi, approximately 1.6180339887. As n grows large,
+ *  the ratio F(n)/F(n-1) gets closer and closer to this exact number -
+ *  that famous fact is what the "Algorithm view" graph illustrates. */
+const GOLDEN_RATIO = (1 + Math.sqrt(5)) / 2;
+
+/* ----------------------------------------------------------------
+   SECTION 2: GRAB REFERENCES TO THE HTML ELEMENTS
+   Every "document.getElementById(...)" line below simply finds the
+   matching element from the HTML above, so our JavaScript code can
+   read its value or change what's on screen.
+   ---------------------------------------------------------------- */
+const minInput      = document.getElementById('minIndex');
+const maxInput       = document.getElementById('maxIndex');
+const graphSelect    = document.getElementById('graphSelect');
+const themeToggleBtn = document.getElementById('themeToggle');
+const errorMsgEl     = document.getElementById('errorMsg');
+const chartTitleEl   = document.getElementById('chartTitle');
+const chartCaptionEl = document.getElementById('chartCaption');
+const legendEl       = document.getElementById('legend');
+const tooltipEl      = document.getElementById('tooltip');
+const canvas         = document.getElementById('chart');
+const ctx            = canvas.getContext('2d');
+const tableBody      = document.getElementById('dataTableBody');
+
+/* This variable remembers where every drawn shape is on screen, so
+   that when the mouse moves we can figure out which shape (which bar,
+   which point, which square) is underneath the cursor. It gets
+   rewritten every time we redraw a chart. */
+let hitRegions = [];
+
+/* Reads the live CSS variables (the "paint cans" from the <style>
+   block) so our canvas-drawing code always matches the current
+   light/dark theme, without hard-coding any color twice. */
+function getPalette() {
+  const style = getComputedStyle(document.getElementById('appRoot'));
+  const v = (name) => style.getPropertyValue(name).trim();
+  return {
+    surface:   v('--surface-1'),
+    textPrimary:   v('--text-primary'),
+    textSecondary: v('--text-secondary'),
+    textMuted: v('--text-muted'),
+    gridline:  v('--gridline'),
+    baseline:  v('--baseline'),
+    series1:   v('--series-1'),
+    series2:   v('--series-2'),
+    seq100:    v('--seq-100'),
+    seq250:    v('--seq-250'),
+    seq400:    v('--seq-400'),
+    seq550:    v('--seq-550'),
+    seq700:    v('--seq-700'),
+  };
+}
+
+/* ----------------------------------------------------------------
+   SECTION 3: CANVAS SETUP
+   Computer screens pack different numbers of physical pixels into
+   the same visual space (this is called "device pixel ratio", or
+   DPR). If we don't account for that, our drawing looks blurry on
+   sharp, high-resolution screens. This helper resizes the canvas's
+   *actual* pixel grid to match the screen density, while keeping the
+   on-page *visual* size exactly what our CSS says (100% wide, 420px
+   tall), so lines and text stay crisp everywhere.
+   ---------------------------------------------------------------- */
+function prepareCanvas() {
+  const dpr = window.devicePixelRatio || 1;
+  const cssWidth = canvas.clientWidth;
+  const cssHeight = canvas.clientHeight;
+  canvas.width = Math.round(cssWidth * dpr);
+  canvas.height = Math.round(cssHeight * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // scale all future drawing commands
+  return { width: cssWidth, height: cssHeight };
+}
+
+/* ----------------------------------------------------------------
+   SECTION 4: THE THREE DRAWINGS
+   ---------------------------------------------------------------- */
+
+/**
+ * DEFAULT CHART: a simple, honest bar chart of the raw Fibonacci
+ * values between the chosen min and max term. This is the "just show
+ * me the numbers" view.
+ */
+function drawDefaultChart(fullSequence, minN, maxN) {
+  const palette = getPalette();
+  const { width, height } = prepareCanvas();
+  ctx.clearRect(0, 0, width, height);
+  hitRegions = [];
+
+  const values = [];
+  for (let n = minN; n <= maxN; n++) values.push({ n, value: fullSequence[n] });
+
+  const marginLeft = 56, marginRight = 16, marginTop = 16, marginBottom = 34;
+  const plotWidth = width - marginLeft - marginRight;
+  const plotHeight = height - marginTop - marginBottom;
+  const maxValue = Math.max(...values.map(d => d.value), 1);
+
+  // --- Y-axis gridlines, rounded to "clean" numbers -------------------
+  const ticks = niceTicks(0, maxValue, 5);
+  ctx.strokeStyle = palette.gridline;
+  ctx.lineWidth = 1;
+  ctx.font = '11px system-ui, sans-serif';
+  ctx.fillStyle = palette.textMuted;
+  ticks.forEach(tick => {
+    const y = marginTop + plotHeight - (tick / maxValue) * plotHeight;
+    ctx.beginPath();
+    ctx.moveTo(marginLeft, y);
+    ctx.lineTo(width - marginRight, y);
+    ctx.stroke();
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(formatNumber(tick), marginLeft - 8, y);
+  });
+
+  // --- The baseline the bars grow up from ----------------------------
+  const baseY = marginTop + plotHeight;
+  ctx.strokeStyle = palette.baseline;
+  ctx.beginPath();
+  ctx.moveTo(marginLeft, baseY);
+  ctx.lineTo(width - marginRight, baseY);
+  ctx.stroke();
+
+  // --- The bars themselves --------------------------------------------
+  const slot = plotWidth / values.length;
+  const barWidth = Math.min(24, slot * 0.6); // spec: bars are capped at 24px thick
+  values.forEach((d, i) => {
+    const slotCenter = marginLeft + slot * i + slot / 2;
+    const barHeight = (d.value / maxValue) * plotHeight;
+    const barTop = baseY - barHeight;
+    drawRoundedTopBar(slotCenter - barWidth / 2, barTop, barWidth, barHeight, palette.series1);
+    hitRegions.push({
+      kind: 'bar',
+      x: slotCenter - slot / 2, y: marginTop, w: slot, h: plotHeight,
+      label: `n = ${d.n}`, value: `F(n) = ${formatNumber(d.value)}`,
+      anchorX: slotCenter, anchorY: barTop,
+    });
+
+    // X-axis label under every bar (there is room since max is capped at 50 terms)
+    if (values.length <= 26 || i % Math.ceil(values.length / 26) === 0) {
+      ctx.fillStyle = palette.textMuted;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillText(String(d.n), slotCenter, baseY + 8);
+    }
+  });
+
+  // Direct label on the single largest bar only (label selectively, not every bar)
+  const peak = values.reduce((a, b) => (b.value > a.value ? b : a));
+  const peakSlotCenter = marginLeft + slot * values.indexOf(peak) + slot / 2;
+  const peakBarHeight = (peak.value / maxValue) * plotHeight;
+  ctx.fillStyle = palette.textPrimary;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.font = '12px system-ui, sans-serif';
+  ctx.fillText(formatNumber(peak.value), peakSlotCenter, baseY - peakBarHeight - 6);
+
+  legendEl.style.display = 'none'; // one series only -> no legend box needed
+  chartTitleEl.textContent = 'Default chart';
+  chartCaptionEl.textContent = `Fibonacci value F(n) for n = ${minN} through ${maxN}.`;
+}
+
+/** Small helper: draws a bar with square bottom corners (it sits on the
+ *  baseline) and rounded top corners (per the mark spec: "4px rounded
+ *  data-end, square at the baseline"). */
+function drawRoundedTopBar(x, y, w, h, color) {
+  const r = Math.min(4, w / 2, Math.max(h, 0));
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.moveTo(x, y + h);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h);
+  ctx.closePath();
+  ctx.fill();
+}
+
+/**
+ * ALGORITHM VIEW: this graph is about *how the Fibonacci algorithm
+ * behaves*, not just its raw numbers. The famous fact it illustrates:
+ * if you divide each Fibonacci number by the one before it
+ * (F(n) / F(n-1)), the answer wobbles around at first but then
+ * settles down, getting closer and closer to a fixed number called
+ * the "golden ratio" (about 1.618) as n increases. We draw that
+ * ratio as a line, plus a second reference line marking exactly where
+ * the golden ratio sits, so you can visually watch the gap close.
+ */
+function drawAlgoChart(fullSequence, minN, maxN) {
+  const palette = getPalette();
+  const { width, height } = prepareCanvas();
+  ctx.clearRect(0, 0, width, height);
+  hitRegions = [];
+
+  // The ratio needs a "previous term", so it only makes sense starting
+  // at n = 1 at the earliest (F(1)/F(0) would divide by zero).
+  const startN = Math.max(minN, 2);
+  const points = [];
+  for (let n = startN; n <= maxN; n++) {
+    points.push({ n, ratio: fullSequence[n] / fullSequence[n - 1] });
+  }
+
+  if (points.length < 2) {
+    ctx.fillStyle = palette.textSecondary;
+    ctx.font = '13px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Pick a wider n-range (max - min of at least 3) to see convergence.', width / 2, height / 2);
+    legendEl.style.display = 'none';
+    return;
+  }
+
+  const marginLeft = 56, marginRight = 60, marginTop = 20, marginBottom = 34;
+  const plotWidth = width - marginLeft - marginRight;
+  const plotHeight = height - marginTop - marginBottom;
+
+  // The scale is centered on the golden ratio so the reference line is
+  // always visible, with a little breathing room above/below the data.
+  const ratios = points.map(p => p.ratio);
+  const dataMin = Math.min(...ratios, GOLDEN_RATIO);
+  const dataMax = Math.max(...ratios, GOLDEN_RATIO);
+  const pad = Math.max((dataMax - dataMin) * 0.25, 0.05);
+  const yMin = dataMin - pad, yMax = dataMax + pad;
+  const yFor = (v) => marginTop + plotHeight - ((v - yMin) / (yMax - yMin)) * plotHeight;
+  const xFor = (i) => marginLeft + (points.length === 1 ? 0 : (i / (points.length - 1)) * plotWidth);
+
+  // --- gridlines -------------------------------------------------------
+  const ticks = niceTicks(yMin, yMax, 5);
+  ctx.strokeStyle = palette.gridline;
+  ctx.lineWidth = 1;
+  ctx.font = '11px system-ui, sans-serif';
+  ticks.forEach(tick => {
+    const y = yFor(tick);
+    ctx.beginPath();
+    ctx.moveTo(marginLeft, y);
+    ctx.lineTo(width - marginRight, y);
+    ctx.stroke();
+    ctx.fillStyle = palette.textMuted;
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(tick.toFixed(2), marginLeft - 8, y);
+  });
+
+  // --- the golden-ratio reference line (series 2, aqua) ---------------
+  const phiY = yFor(GOLDEN_RATIO);
+  ctx.strokeStyle = palette.series2;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(marginLeft, phiY);
+  ctx.lineTo(width - marginRight, phiY);
+  ctx.stroke();
+  ctx.fillStyle = palette.textPrimary; // text never wears the data color
+  ctx.font = '12px system-ui, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('φ ≈ 1.618', width - marginRight + 6, phiY);
+
+  // --- the ratio line (series 1, blue), 2px, round joins --------------
+  ctx.strokeStyle = palette.series1;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  points.forEach((p, i) => {
+    const x = xFor(i), y = yFor(p.ratio);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // --- end marker + hit regions for hover ------------------------------
+  points.forEach((p, i) => {
+    const x = xFor(i), y = yFor(p.ratio);
+    hitRegions.push({
+      kind: 'point', x: x - 10, y: y - 10, w: 20, h: 20,
+      label: `n = ${p.n}`, value: `F(n)/F(n-1) = ${p.ratio.toFixed(6)}`,
+      anchorX: x, anchorY: y,
+    });
+  });
+  const last = points[points.length - 1];
+  const lastX = xFor(points.length - 1), lastY = yFor(last.ratio);
+  ctx.fillStyle = palette.surface;
+  ctx.beginPath(); ctx.arc(lastX, lastY, 6, 0, Math.PI * 2); ctx.fill(); // 2px surface ring
+  ctx.fillStyle = palette.series1;
+  ctx.beginPath(); ctx.arc(lastX, lastY, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = palette.textPrimary;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText(last.ratio.toFixed(4), lastX, lastY - 10);
+
+  // --- x-axis term labels ----------------------------------------------
+  ctx.fillStyle = palette.textMuted;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  const labelEvery = Math.max(1, Math.ceil(points.length / 12));
+  points.forEach((p, i) => {
+    if (i % labelEvery === 0 || i === points.length - 1) {
+      ctx.fillText(String(p.n), xFor(i), marginTop + plotHeight + 8);
+    }
+  });
+
+  // two series are present now (the ratio, and the golden-ratio target),
+  // so a legend is required rather than optional.
+  legendEl.style.display = 'flex';
+  legendEl.innerHTML = `
+    <span class="item"><span class="dot" style="background:${palette.series1}"></span>F(n) / F(n-1)</span>
+    <span class="item"><span class="dot" style="background:${palette.series2}"></span>Golden ratio (φ)</span>
+  `;
+  chartTitleEl.textContent = 'Algorithm view';
+  chartCaptionEl.textContent = 'How the ratio of consecutive Fibonacci terms converges on the golden ratio as n grows.';
+}
+
+/**
+ * SPIRAL GRID: the classic "Fibonacci spiral" made of nested squares,
+ * the same construction photographers overlay on a photo to line up a
+ * pleasing composition (a cousin of the rule-of-thirds grid). Each
+ * square's side length is a Fibonacci value; each new square is placed
+ * flush against the previous ones, turning 90 degrees each time; and a
+ * quarter-circle arc is drawn through each square to trace the spiral.
+ */
+function drawSpiralChart(fullSequence, minN, maxN) {
+  const palette = getPalette();
+  const { width, height } = prepareCanvas();
+  ctx.clearRect(0, 0, width, height);
+  hitRegions = [];
+
+  // The golden-spiral tiling is only geometrically valid when it starts
+  // from the true beginning of the sequence: the first two terms both
+  // equal 1, forming the starting 1x1-plus-1x1 domino every later square
+  // attaches to. So, unlike the other two graphs, the spiral always
+  // starts at n = 1 - the "min term" control does not apply here (a note
+  // about that is shown in the caption below).
+  let terms = [];
+  for (let n = 1; n <= maxN; n++) terms.push(fullSequence[n]);
+  // Limit how many squares we actually draw - beyond ~12 terms the
+  // early squares become invisibly small slivers next to the huge ones.
+  terms = terms.slice(0, 12);
+
+  if (terms.length === 0) {
+    ctx.fillStyle = palette.textSecondary;
+    ctx.font = '13px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Pick a range that includes at least one positive term.', width / 2, height / 2);
+    legendEl.style.display = 'none';
+    return;
+  }
+
+  const margin = 20;
+  const availW = width - margin * 2, availH = height - margin * 2;
+
+  // Work out the bounding box the whole spiral will occupy in "square
+  // units" first (before we know the pixel scale), by walking the same
+  // placement rule we'll use to actually draw it.
+  const layout = layoutFibonacciSquares(terms);
+  const scale = Math.min(availW / layout.totalW, availH / layout.totalH);
+  const offsetX = margin + (availW - layout.totalW * scale) / 2 - layout.minX * scale;
+  const offsetY = margin + (availH - layout.totalH * scale) / 2 - layout.minY * scale;
+
+  // --- draw each square, shaded along the sequential blue ramp ---------
+  const ramp = [palette.seq100, palette.seq250, palette.seq400, palette.seq550, palette.seq700];
+  layout.squares.forEach((sq, i) => {
+    const px = offsetX + sq.x * scale;
+    const py = offsetY + sq.y * scale;
+    const ps = sq.size * scale;
+    const rampIndex = Math.min(ramp.length - 1, Math.floor((i / layout.squares.length) * ramp.length));
+    ctx.fillStyle = ramp[rampIndex];
+    ctx.fillRect(px, py, ps, ps);
+    // 2px surface-color gap between touching squares, drawn as an inset stroke
+    ctx.strokeStyle = palette.surface;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(px + 1, py + 1, ps - 2, ps - 2);
+
+    hitRegions.push({
+      kind: 'square', x: px, y: py, w: ps, h: ps,
+      label: `Square ${i + 1}`, value: `side = ${formatNumber(sq.value)}`,
+      anchorX: px + ps / 2, anchorY: py,
+    });
+
+    // Only label squares big enough to hold readable text (measure first).
+    ctx.font = '11px system-ui, sans-serif';
+    const text = formatNumber(sq.value);
+    if (ps > ctx.measureText(text).width + 12 && ps > 18) {
+      ctx.fillStyle = rampIndex >= 3 ? '#ffffff' : palette.textPrimary; // pick by fill luminance
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, px + ps / 2, py + ps / 2);
+    }
+  });
+
+  // --- trace the spiral arc through the squares -------------------------
+  ctx.strokeStyle = palette.textPrimary;
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  layout.squares.forEach((sq) => {
+    const cx = offsetX + (sq.arcCenter.x) * scale;
+    const cy = offsetY + (sq.arcCenter.y) * scale;
+    const r = sq.size * scale;
+    ctx.arc(cx, cy, r, sq.arcStart, sq.arcEnd, sq.arcCounterClockwise);
+  });
+  ctx.stroke();
+
+  legendEl.style.display = 'none'; // single sequential hue -> no legend box needed
+  chartTitleEl.textContent = 'Spiral grid';
+  chartCaptionEl.textContent = `Fibonacci squares and the golden spiral traced through them (n = 1 through ${terms.length}) - the same grid photographers use to compose a shot. This view always starts from the beginning of the sequence, since the tiling only lines up correctly that way; "min term" is ignored here.`;
+}
+
+/**
+ * Works out where every square goes. Starting from the two smallest
+ * squares in the middle, each subsequent (bigger) square is attached to
+ * the flush edge of the shape built so far, rotating direction each
+ * time (right, up, left, down, right, ...), which is exactly how the
+ * real Fibonacci tiling is constructed. Also records the quarter-circle
+ * arc (center point + start/end angle) that passes through each square,
+ * which together trace the continuous spiral curve.
+ */
+function layoutFibonacciSquares(values) {
+  const squares = [];
+  // Directions cycle in this order; each is "which corner of the new
+  // square touches the existing shape and which way the arc bows".
+  const DIR = ['right', 'up', 'left', 'down'];
+  let x = 0, y = 0; // running top-left corner of the "known" bounding box
+  let w = 0, h = 0; // running width/height of the known bounding box
+
+  values.forEach((value, i) => {
+    const size = value;
+    let sq = { value, size };
+    // The very first square (i === 0) has no direction - it's just placed
+    // at the origin as the starting point. Every square after that cycles
+    // through the 4 directions, so the *second* square (i === 1) is the
+    // one that starts the cycle at 'right'.
+    const dir = i === 0 ? null : DIR[(i - 1) % 4];
+
+    if (i === 0) {
+      sq.x = 0; sq.y = 0;
+      w = size; h = size;
+    } else if (dir === 'right') {
+      sq.x = x + w; sq.y = y;
+      w = w + size;
+    } else if (dir === 'up') {
+      sq.x = x; sq.y = y - size;
+      y = y - size;
+      h = h + size;
+    } else if (dir === 'left') {
+      sq.x = x - size; sq.y = y + h - size;
+      x = x - size;
+      w = w + size;
+    } else { // 'down'
+      sq.x = x; sq.y = y + h;
+      h = h + size;
+    }
+
+    // The arc for this square is a quarter circle whose radius equals
+    // the square's side, anchored at the corner the spiral pivots
+    // around, sweeping through the two opposite corners of the square.
+    const angles = {
+      right: { center: { x: sq.x, y: sq.y + sq.size }, start: -Math.PI / 2, end: 0, ccw: false },
+      up:    { center: { x: sq.x + sq.size, y: sq.y + sq.size }, start: Math.PI, end: Math.PI / 2, ccw: true },
+      left:  { center: { x: sq.x + sq.size, y: sq.y }, start: Math.PI / 2, end: Math.PI, ccw: false },
+      down:  { center: { x: sq.x, y: sq.y }, start: 0, end: -Math.PI / 2, ccw: true },
+    };
+    const a = i === 0 ? angles.right : angles[dir];
+    sq.arcCenter = a.center;
+    sq.arcStart = a.start;
+    sq.arcEnd = a.end;
+    sq.arcCounterClockwise = a.ccw;
+
+    squares.push(sq);
+  });
+
+  const minX = Math.min(...squares.map(s => s.x));
+  const minY = Math.min(...squares.map(s => s.y));
+  const maxX = Math.max(...squares.map(s => s.x + s.size));
+  const maxY = Math.max(...squares.map(s => s.y + s.size));
+
+  return { squares, minX, minY, totalW: maxX - minX, totalH: maxY - minY };
+}
+
+/* ----------------------------------------------------------------
+   SMALL SHARED HELPERS
+   ---------------------------------------------------------------- */
+
+/** Picks visually "clean" numbers for axis gridlines (things like
+ *  0, 20, 40 rather than 0, 17.3333, 34.6666), the same way most
+ *  charting libraries do it. */
+function niceTicks(min, max, approxCount) {
+  const range = max - min || 1;
+  const roughStep = range / approxCount;
+  const magnitude = Math.pow(10, Math.floor(Math.log10(roughStep)));
+  const residual = roughStep / magnitude;
+  let step;
+  if (residual > 5) step = 10 * magnitude;
+  else if (residual > 2) step = 5 * magnitude;
+  else if (residual > 1) step = 2 * magnitude;
+  else step = magnitude;
+
+  const ticks = [];
+  const start = Math.ceil(min / step) * step;
+  for (let t = start; t <= max; t += step) ticks.push(Number(t.toFixed(10)));
+  return ticks;
+}
+
+/** Turns a big plain number into an easier-to-read string, e.g.
+ *  12586269025 -> "12,586,269,025". */
+function formatNumber(n) {
+  return Math.round(n).toLocaleString('en-US');
+}
+
+/* ----------------------------------------------------------------
+   SECTION 5: MOUSE INTERACTION (HOVER TOOLTIP)
+   Every draw function above fills the shared `hitRegions` list with
+   invisible rectangles that mark where each bar/point/square was
+   drawn. On every mouse movement we check which rectangle (if any)
+   contains the mouse, and show a small tooltip box with that item's
+   exact numbers.
+   ---------------------------------------------------------------- */
+canvas.addEventListener('mousemove', (event) => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = event.clientX - rect.left;
+  const my = event.clientY - rect.top;
+
+  const hit = hitRegions.find(r => mx >= r.x && mx <= r.x + r.w && my >= r.y && my <= r.y + r.h);
+  if (!hit) {
+    tooltipEl.classList.remove('visible');
+    return;
+  }
+  tooltipEl.innerHTML = `<strong>${hit.label}</strong><br>${hit.value}`;
+  tooltipEl.style.left = `${hit.anchorX}px`;
+  tooltipEl.style.top = `${hit.anchorY}px`;
+  tooltipEl.classList.add('visible');
+});
+canvas.addEventListener('mouseleave', () => tooltipEl.classList.remove('visible'));
+
+/* ----------------------------------------------------------------
+   SECTION 6: WIRING IT ALL TOGETHER
+   This is the "conductor" section: it reads whatever the user has
+   typed/selected, checks it makes sense, fills in the accessible data
+   table, and calls whichever one of the three draw functions matches
+   the dropdown - every time something changes.
+   ---------------------------------------------------------------- */
+function renderDataTable(fullSequence, minN, maxN) {
+  let rows = '';
+  for (let n = minN; n <= maxN; n++) {
+    const ratio = n > 0 ? (fullSequence[n] / fullSequence[n - 1]).toFixed(6) : '—';
+    rows += `<tr><td>${n}</td><td>${formatNumber(fullSequence[n])}</td><td>${ratio}</td></tr>`;
+  }
+  tableBody.innerHTML = rows;
+}
+
+function render() {
+  let minN = parseInt(minInput.value, 10);
+  let maxN = parseInt(maxInput.value, 10);
+
+  // ---- validate the min/max the user typed in before doing any math ----
+  if (Number.isNaN(minN) || Number.isNaN(maxN)) {
+    errorMsgEl.textContent = 'Please enter whole numbers for both min and max.';
+    return;
+  }
+  minN = Math.max(0, Math.min(50, minN));
+  maxN = Math.max(0, Math.min(50, maxN));
+  if (minN > maxN) {
+    errorMsgEl.textContent = 'Min term must be less than or equal to max term.';
+    return;
+  }
+  errorMsgEl.textContent = '';
+
+  const fullSequence = buildFibonacciSequence(maxN);
+  renderDataTable(fullSequence, minN, maxN);
+
+  const graphType = graphSelect.value;
+  if (graphType === 'default') drawDefaultChart(fullSequence, minN, maxN);
+  else if (graphType === 'algo') drawAlgoChart(fullSequence, minN, maxN);
+  else drawSpiralChart(fullSequence, minN, maxN);
+}
+
+// Redraw whenever a control changes.
+[minInput, maxInput].forEach(el => el.addEventListener('change', render));
+graphSelect.addEventListener('change', render);
+
+// Redraw on window resize too, since the canvas is measured in CSS pixels.
+window.addEventListener('resize', () => {
+  clearTimeout(window.__resizeT);
+  window.__resizeT = setTimeout(render, 100);
+});
+
+// The manual light/dark toggle button just stamps a `data-theme`
+// attribute on the page root; the CSS variables block at the top of
+// the file does the rest.
+themeToggleBtn.addEventListener('click', () => {
+  const root = document.documentElement;
+  const current = root.getAttribute('data-theme');
+  root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+  render(); // colors changed, so the canvas needs to be repainted
+});
+
+// Draw the very first chart as soon as the page loads.
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Are You Feeling — Evidence-Informed Support</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <h1>How Are You Feeling?</h1>
+    <p class="tagline">Describe what's going on, or pick a feeling below. You'll get approaches drawn from
+      real, cited work by recognized therapists and researchers — with links to the original source, and
+      a note on the documented case it comes from.</p>
+  </header>
+
+  <div class="disclaimer-bar" role="note">
+    This is educational information, not a diagnosis and not a substitute for care from a licensed
+    therapist, counselor, or doctor. If something here resonates, that's a good reason to bring it to a
+    professional — not a reason to skip seeing one.
+  </div>
+
+  <div id="crisis-banner" class="crisis-banner" hidden role="alert">
+    <h2>If you're in danger right now, please reach out immediately</h2>
+    <ul>
+      <li><strong>US:</strong> Call or text <strong>988</strong> (Suicide &amp; Crisis Lifeline), available 24/7.</li>
+      <li><strong>US (text-based):</strong> Text <strong>HOME</strong> to <strong>741741</strong> (Crisis Text Line).</li>
+      <li><strong>Outside the US:</strong> Find a local crisis line via the
+        <a href="https://www.iasp.info/resources/Crisis_Centres/" target="_blank" rel="noopener">International Association for Suicide Prevention's crisis center directory</a>.</li>
+      <li>If you or someone else is in immediate physical danger, call your local emergency number
+        (e.g. 911 in the US) now.</li>
+    </ul>
+    <p>What follows on this page is general, educational information — it is not built for a crisis, and it
+      is not a substitute for the resources above.</p>
+  </div>
+
+  <main>
+    <section class="input-section">
+      <h2>Pick what fits, or write your own</h2>
+      <div id="mood-picker" class="mood-picker"></div>
+
+      <label for="free-text">Or describe how you feel in your own words</label>
+      <textarea id="free-text" rows="4" placeholder="e.g. I can't stop worrying about work and my heart races at night..."></textarea>
+
+      <button id="submit-btn" type="button">Show me what's been documented to help</button>
+    </section>
+
+    <section id="results" class="results" hidden>
+      <div id="results-content"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Sources are curated from peer-reviewed research and primary published works by named therapists and
+      researchers. Nothing here is generated on the fly — every entry links to a real, checkable document.
+      See <code>CLAUDE.md</code> for the sourcing standards this site follows.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

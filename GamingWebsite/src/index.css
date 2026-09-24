@@ -1,0 +1,271 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Press Start 2P", cursive;
+  --font-body: "VT323", ui-monospace, monospace;
+
+  --color-bg-void: #0b0014;
+  --color-bg-dark: #150726;
+  --color-bg-panel: #1c0f33;
+  --color-bg-panel-hi: #26123f;
+
+  --color-neon-pink: #ff2ec4;
+  --color-neon-magenta: #ff4fd8;
+  --color-neon-cyan: #2fe6ff;
+  --color-neon-purple: #b967ff;
+  --color-neon-yellow: #ffd93d;
+  --color-neon-orange: #ff7a2f;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-bg-void);
+  color: #f2e9ff;
+  font-size: 1.15rem;
+  line-height: 1.5;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Perspective synthwave grid floor */
+.retro-grid {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    var(--color-bg-void) 0%,
+    #1a0a33 45%,
+    #2a0f4a 70%,
+    #3d0f52 100%
+  );
+}
+
+.retro-grid::before {
+  content: "";
+  position: absolute;
+  left: -50%;
+  right: -50%;
+  bottom: -10%;
+  height: 70%;
+  background-image: linear-gradient(
+      to right,
+      rgba(255, 46, 196, 0.55) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(47, 230, 255, 0.4) 1px, transparent 1px);
+  background-size: 60px 40px;
+  transform: perspective(220px) rotateX(60deg);
+  transform-origin: bottom;
+  mask-image: linear-gradient(to top, black 40%, transparent 95%);
+  -webkit-mask-image: linear-gradient(to top, black 40%, transparent 95%);
+}
+
+.retro-sun {
+  position: absolute;
+  left: 50%;
+  top: 18%;
+  width: min(60vw, 460px);
+  height: min(60vw, 460px);
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background: linear-gradient(
+    180deg,
+    var(--color-neon-yellow) 0%,
+    var(--color-neon-orange) 35%,
+    var(--color-neon-pink) 70%,
+    var(--color-neon-purple) 100%
+  );
+  box-shadow: 0 0 120px 20px rgba(255, 79, 216, 0.35);
+  overflow: hidden;
+}
+
+.retro-sun::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 10px,
+    var(--color-bg-void) 10px,
+    var(--color-bg-void) 16px
+  );
+  opacity: 0.85;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 45%, black 45%);
+  mask-image: linear-gradient(to bottom, transparent 45%, black 45%);
+}
+
+/* CRT scanlines overlay */
+.scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.18) 3px,
+    rgba(0, 0, 0, 0) 4px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.5;
+}
+
+.vignette {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  box-shadow: inset 0 0 18vw rgba(0, 0, 0, 0.65);
+}
+
+/* Neon text + glow helpers */
+.neon-text-pink {
+  color: #fff0fb;
+  text-shadow:
+    0 0 4px var(--color-neon-pink),
+    0 0 12px var(--color-neon-pink),
+    0 0 28px var(--color-neon-magenta);
+}
+
+.neon-text-cyan {
+  color: #eafeff;
+  text-shadow:
+    0 0 4px var(--color-neon-cyan),
+    0 0 12px var(--color-neon-cyan),
+    0 0 28px var(--color-neon-cyan);
+}
+
+.neon-border {
+  border: 2px solid var(--color-neon-pink);
+  box-shadow:
+    0 0 6px rgba(255, 46, 196, 0.6),
+    0 0 18px rgba(255, 46, 196, 0.25),
+    inset 0 0 10px rgba(255, 46, 196, 0.12);
+}
+
+.neon-border-cyan {
+  border: 2px solid var(--color-neon-cyan);
+  box-shadow:
+    0 0 6px rgba(47, 230, 255, 0.6),
+    0 0 18px rgba(47, 230, 255, 0.25),
+    inset 0 0 10px rgba(47, 230, 255, 0.12);
+}
+
+.retro-panel {
+  background: linear-gradient(
+    160deg,
+    var(--color-bg-panel) 0%,
+    var(--color-bg-panel-hi) 100%
+  );
+  border: 1px solid rgba(185, 103, 255, 0.35);
+  clip-path: polygon(
+    0 12px,
+    12px 0,
+    100% 0,
+    100% calc(100% - 12px),
+    calc(100% - 12px) 100%,
+    0 100%
+  );
+}
+
+.btn-retro {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.25rem;
+  color: #fff0fb;
+  background: rgba(255, 46, 196, 0.12);
+  border: 2px solid var(--color-neon-pink);
+  box-shadow:
+    0 0 6px rgba(255, 46, 196, 0.6),
+    0 0 18px rgba(255, 46, 196, 0.2);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.btn-retro:hover {
+  background: rgba(255, 46, 196, 0.25);
+  box-shadow:
+    0 0 10px rgba(255, 46, 196, 0.9),
+    0 0 32px rgba(255, 46, 196, 0.5);
+  transform: translateY(-2px);
+}
+
+.btn-retro-cyan {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.25rem;
+  color: #eafeff;
+  background: rgba(47, 230, 255, 0.1);
+  border: 2px solid var(--color-neon-cyan);
+  box-shadow:
+    0 0 6px rgba(47, 230, 255, 0.6),
+    0 0 18px rgba(47, 230, 255, 0.2);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.btn-retro-cyan:hover {
+  background: rgba(47, 230, 255, 0.22);
+  box-shadow:
+    0 0 10px rgba(47, 230, 255, 0.9),
+    0 0 32px rgba(47, 230, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+@keyframes flicker {
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  24%,
+  55% {
+    opacity: 0.6;
+  }
+}
+
+.animate-flicker {
+  animation: flicker 6s infinite;
+}
+
+/* Scrollbar retro styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-void);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    var(--color-neon-pink),
+    var(--color-neon-purple)
+  );
+}

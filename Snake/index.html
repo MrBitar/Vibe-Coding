@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Snake · Nokia 3310</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="phone">
+  <div class="phone-top">
+    <span class="brand">NOKIA</span>
+    <span class="antenna" aria-hidden="true"></span>
+  </div>
+
+  <div class="screen-bezel">
+    <div class="screen">
+      <div class="screen-header">
+        <span id="score">SCORE 000</span>
+        <span id="highscore">HI 000</span>
+      </div>
+      <canvas id="game" width="504" height="288"></canvas>
+
+      <div id="overlay" class="overlay">
+        <div class="overlay-content" id="overlay-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="phone-bottom">
+    <button id="mute-btn" class="soft-btn" aria-label="Toggle sound">SOUND: ON</button>
+
+    <div class="dpad" aria-hidden="false">
+      <button class="dpad-btn dpad-up" data-dir="up" aria-label="Up">▲</button>
+      <button class="dpad-btn dpad-left" data-dir="left" aria-label="Left">◀</button>
+      <button class="dpad-btn dpad-center" data-dir="pause" aria-label="Pause">II</button>
+      <button class="dpad-btn dpad-right" data-dir="right" aria-label="Right">▶</button>
+      <button class="dpad-btn dpad-down" data-dir="down" aria-label="Down">▼</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

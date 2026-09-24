@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Solitaire</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Solitaire</h1>
+    <div class="stats">
+      <span id="moves">Moves: 0</span>
+      <span id="status"></span>
+    </div>
+    <button id="undoBtn" class="btn">Undo</button>
+    <button id="hintBtn" class="btn">Hint</button>
+    <button id="autoBtn" class="btn">Autocomplete</button>
+    <button id="newGameBtn" class="btn">New Game</button>
+  </header>
+
+  <main class="board">
+    <section class="row top-row">
+      <div class="pile stock" id="stock"></div>
+      <div class="pile waste" id="waste"></div>
+      <div class="spacer"></div>
+      <div class="pile foundation" id="foundation-0" data-suit="0"></div>
+      <div class="pile foundation" id="foundation-1" data-suit="1"></div>
+      <div class="pile foundation" id="foundation-2" data-suit="2"></div>
+      <div class="pile foundation" id="foundation-3" data-suit="3"></div>
+    </section>
+
+    <section class="row tableau-row">
+      <div class="pile tableau" id="tableau-0"></div>
+      <div class="pile tableau" id="tableau-1"></div>
+      <div class="pile tableau" id="tableau-2"></div>
+      <div class="pile tableau" id="tableau-3"></div>
+      <div class="pile tableau" id="tableau-4"></div>
+      <div class="pile tableau" id="tableau-5"></div>
+      <div class="pile tableau" id="tableau-6"></div>
+    </section>
+  </main>
+
+  <div id="winOverlay" class="win-overlay hidden">
+    <div class="win-box">
+      <h2>You Won!</h2>
+      <p id="winMoves"></p>
+      <button id="playAgainBtn">Play Again</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

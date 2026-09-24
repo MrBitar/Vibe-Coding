@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(pip install *)",
+      "Bash(python -m py_compile solitaire_bot/calibrate.py)",
+      "Read(//c/Users/user/AppData/Local/Temp/claude/C--Users-user-Desktop-Vibe-Coding-ClaudeCMD-SolitareSolver/67cb41b2-95b7-4e60-8c25-25ea35ddd796/tasks/**)",
+      "Bash(python -m solitaire_bot.main demo --seed 7 --delay 0.01 --node-budget 150000)",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_take_screenshot",
+      "Bash(powershell -c \"\\(Resolve-Path '.playwright-mcp/solitr_test.png'\\).Path\")",
+      "Bash(python -m py_compile solitaire_bot/main.py solitaire_bot/perception.py solitaire_bot/autolayout.py solitaire_bot/synthetic_templates.py solitaire_bot/solver/klondike.py)",
+      "Bash(python -m solitaire_bot.main demo --seed 42 --delay 0.01 --node-budget 150000)",
+      "Bash(python -m solitaire_bot.main --help)",
+      "Bash(python -m solitaire_bot.main run --help)"
+    ]
+  }
+}
